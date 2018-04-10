@@ -1,0 +1,25 @@
+{
+  "name": "dsl-schema",
+  "version": "0.0.1",
+  "description": "Write and check schema comilancy with simple DSL",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgoscinski/dsl-schema.git"
+  },
+  "keywords": [
+    "DSL",
+    "Schema",
+    "validate",
+    "structure"
+  ],
+  "author": "Bartosz Gościński <bargosc@gmail.com>",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/bgoscinski/dsl-schema/issues"
+  },
+  "homepage": "https://github.com/bgoscinski/dsl-schema#readme"
+}
