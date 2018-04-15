@@ -1,4 +1,5 @@
 import * as Lib from '../lib';
+import draftv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 
 describe('public api', () => {
   const typeFactories = [
@@ -27,9 +28,9 @@ describe('public api', () => {
     // 'Uri',
   ];
 
-  const generators = [Lib.sthLike.name];
+  const otherFns = [Lib.sthLike.name, Lib.validatorFor.name];
 
-  typeFactories.concat(generators).forEach(name => {
+  typeFactories.concat(otherFns).forEach(name => {
     it(`should expose ${name} factory`, () => {
       expect(typeof Lib[name]).toBe('function');
     });
@@ -42,7 +43,7 @@ describe('public api', () => {
   });
 
   it(`should not expose anything else`, () => {
-    const all = [].concat(typeFactories, constants, generators);
+    const all = [].concat(typeFactories, constants, otherFns);
     for (const key in Lib) {
       expect(all).toContain(key);
     }
@@ -72,5 +73,21 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     });
 
     expect(actual).toEqual(expected);
+  });
+
+  const isValid = Lib.validatorFor(draftv7);
+
+  it(`should generate valid schema`, () => {
+    expect(isValid(Lib.str('1 < len < 321')).isValid).toBe(true);
+    expect(isValid(Lib.int('1 < x < 23, 3.2n')).isValid).toBe(true);
+    expect(isValid(Lib.float('1 <= x < 2, 0.1n')).isValid).toBe(true);
+    expect(isValid(Lib.record({ foo: Lib.Bool })).isValid).toBe(true);
+    expect(isValid(Lib.dict('23 < len <= 32', Lib.Bool)).isValid).toBe(true);
+    expect(isValid(Lib.list('uniq, 2 < len < 3', Lib.Bool)).isValid).toBe(true);
+    expect(isValid(Lib.tuple(Lib.Bool, Lib.Null)).isValid).toBe(true);
+    expect(isValid(Lib.allOf([Lib.Bool, Lib.Null])).isValid).toBe(true);
+    expect(isValid(Lib.anyOf([Lib.Bool, Lib.Null])).isValid).toBe(true);
+    expect(isValid(Lib.oneOf([Lib.Bool, Lib.Null])).isValid).toBe(true);
+    expect(isValid(Lib.not(Lib.Bool)).isValid).toBe(true);
   });
 });

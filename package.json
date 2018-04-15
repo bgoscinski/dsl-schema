@@ -28,5 +28,7 @@
     "babel-preset-env": "^1.6.1",
     "jest": "^22.4.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ajv": "^6.4.0"
+  }
 }
