@@ -4,7 +4,8 @@
   "description": "Write and check schema comilancy with simple DSL",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "jest --watch"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/bgoscinski/dsl-schema/issues"
   },
-  "homepage": "https://github.com/bgoscinski/dsl-schema#readme"
+  "homepage": "https://github.com/bgoscinski/dsl-schema#readme",
+  "devDependencies": {
+    "babel-jest": "^22.4.3",
+    "babel-preset-env": "^1.6.1",
+    "jest": "^22.4.3"
+  },
+  "dependencies": {}
 }
