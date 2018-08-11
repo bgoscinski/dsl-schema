@@ -12,11 +12,11 @@ exports[`assertFor should throw when data doesn't match schema [1] 1`] = `
 
 exports[`assertFor should throw when data doesn't match schema [2] 1`] = `
 "[1] Property at .a doesn't match schema
-  Reason: should be number
+  Reason: should be integer
   Value:
     [32m''[39m
   Schema:
-    [32m'number'[39m
+    [32m'integer'[39m
 
 [2] Property at .b doesn't match schema
   Reason: should have required property 'c'
@@ -26,10 +26,10 @@ exports[`assertFor should throw when data doesn't match schema [2] 1`] = `
     { c: [36m[Object][39m, d: [36m[Object][39m }
 
 [3] Property at .b.d[0] doesn't match schema
-  Reason: should be number
+  Reason: should be integer
   Value:
     [32m''[39m
   Schema:
-    [32m'number'[39m
+    [32m'integer'[39m
 "
 `;

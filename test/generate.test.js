@@ -5,15 +5,15 @@ describe(G.sthLike.name, () => {
   it('given an example object should return a record schema', () => {
     const actual = G.sthLike({ foo: 3, asd: null });
     const expected = T.record({
-      foo: T.float(),
+      foo: T.int(),
       asd: T.Null,
     });
     expect(actual).toEqual(expected);
   });
 
   it('given an example array should return a tuple schema', () => {
-    const actual = G.sthLike([1, 2, 'foo', true, null]);
-    const expected = T.tuple(T.float(), T.float(), T.str(), T.Bool, T.Null);
+    const actual = G.sthLike([1, 2.3, 'foo', true, null]);
+    const expected = T.tuple(T.int(), T.float(), T.str(), T.Bool, T.Null);
     expect(actual).toEqual(expected);
   });
 
@@ -23,9 +23,9 @@ describe(G.sthLike.name, () => {
     ['true', true, T.Bool],
     ['false', false, T.Bool],
     ['NaN', NaN, T.float()],
-    ['0', 0, T.float()],
+    ['0', 0, T.int()],
     ['-1.1', -1.1, T.float()],
-    ['213', 213, T.float()],
+    ['213', 213, T.int()],
     ['empty string', '', T.str()],
     ['string', 'foo', T.str()],
   ];

@@ -70,10 +70,10 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     const expected = Lib.record({
       foo: Lib.str(),
       bar: Lib.record({
-        baz: Lib.tuple(Lib.Bool, Lib.float(), Lib.str('len >= 5')),
+        baz: Lib.tuple(Lib.Bool, Lib.int(), Lib.str('len >= 5')),
         some: Lib.str(),
         other: Lib.str(),
-        andSomeExplicitlySchemed: Lib.list(Lib.float()),
+        andSomeExplicitlySchemed: Lib.list(Lib.int()),
       }),
     });
 
