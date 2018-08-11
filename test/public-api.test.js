@@ -28,7 +28,11 @@ describe('public api', () => {
     // 'Uri',
   ];
 
-  const otherFns = [Lib.sthLike.name, Lib.validatorFor.name];
+  const otherFns = [
+    Lib.sthLike.name,
+    Lib.validatorFor.name,
+    Lib.predicateFor.name,
+  ];
 
   typeFactories.concat(otherFns).forEach(name => {
     it(`should expose ${name} factory`, () => {
@@ -75,19 +79,19 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     expect(actual).toEqual(expected);
   });
 
-  const isValid = Lib.validatorFor(draftv7);
+  const isValid = Lib.predicateFor(draftv7);
 
   it(`should generate valid schema`, () => {
-    expect(isValid(Lib.str('1 < len < 321')).isValid).toBe(true);
-    expect(isValid(Lib.int('1 < x < 23, 3.2n')).isValid).toBe(true);
-    expect(isValid(Lib.float('1 <= x < 2, 0.1n')).isValid).toBe(true);
-    expect(isValid(Lib.record({ foo: Lib.Bool })).isValid).toBe(true);
-    expect(isValid(Lib.dict('23 < len <= 32', Lib.Bool)).isValid).toBe(true);
-    expect(isValid(Lib.list('uniq, 2 < len < 3', Lib.Bool)).isValid).toBe(true);
-    expect(isValid(Lib.tuple(Lib.Bool, Lib.Null)).isValid).toBe(true);
-    expect(isValid(Lib.allOf([Lib.Bool, Lib.Null])).isValid).toBe(true);
-    expect(isValid(Lib.anyOf([Lib.Bool, Lib.Null])).isValid).toBe(true);
-    expect(isValid(Lib.oneOf([Lib.Bool, Lib.Null])).isValid).toBe(true);
-    expect(isValid(Lib.not(Lib.Bool)).isValid).toBe(true);
+    expect(isValid(Lib.str('1 < len < 321'))).toBe(true);
+    expect(isValid(Lib.int('1 < x < 23, 3.2n'))).toBe(true);
+    expect(isValid(Lib.float('1 <= x < 2, 0.1n'))).toBe(true);
+    expect(isValid(Lib.record({ foo: Lib.Bool }))).toBe(true);
+    expect(isValid(Lib.dict('23 < len <= 32', Lib.Bool))).toBe(true);
+    expect(isValid(Lib.list('uniq, 2 < len < 3', Lib.Bool))).toBe(true);
+    expect(isValid(Lib.tuple(Lib.Bool, Lib.Null))).toBe(true);
+    expect(isValid(Lib.allOf([Lib.Bool, Lib.Null]))).toBe(true);
+    expect(isValid(Lib.anyOf([Lib.Bool, Lib.Null]))).toBe(true);
+    expect(isValid(Lib.oneOf([Lib.Bool, Lib.Null]))).toBe(true);
+    expect(isValid(Lib.not(Lib.Bool))).toBe(true);
   });
 });
