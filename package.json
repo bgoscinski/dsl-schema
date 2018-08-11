@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/bgoscinski/dsl-schema#readme",
   "devDependencies": {
-    "babel-jest": "^22.4.3",
-    "babel-preset-env": "^1.6.1",
-    "jest": "^22.4.3"
+    "babel-jest": "^23.4.2",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.5.0"
   },
   "dependencies": {
-    "ajv": "^6.4.0"
+    "ajv": "^6.5.2"
   }
 }
