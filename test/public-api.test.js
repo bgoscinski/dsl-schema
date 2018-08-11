@@ -18,8 +18,8 @@ describe('public api', () => {
   ];
 
   const constants = [
-    'Bool',
-    'Null',
+    'BOOL',
+    'NULL',
     // 'DateTime',
     // 'Email',
     // 'Hostname',
@@ -70,7 +70,7 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     const expected = Lib.record({
       foo: Lib.str(),
       bar: Lib.record({
-        baz: Lib.tuple(Lib.Bool, Lib.int(), Lib.str('len >= 5')),
+        baz: Lib.tuple(Lib.BOOL, Lib.int(), Lib.str('len >= 5')),
         some: Lib.str(),
         other: Lib.str(),
         andSomeExplicitlySchemed: Lib.list(Lib.int()),
@@ -86,13 +86,13 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     expect(isValid(Lib.str('1 < len < 321'))).toBe(true);
     expect(isValid(Lib.int('1 < x < 23, 3.2n'))).toBe(true);
     expect(isValid(Lib.float('1 <= x < 2, 0.1n'))).toBe(true);
-    expect(isValid(Lib.record({ foo: Lib.Bool }))).toBe(true);
-    expect(isValid(Lib.dict('23 < len <= 32', Lib.Bool))).toBe(true);
-    expect(isValid(Lib.list('uniq, 2 < len < 3', Lib.Bool))).toBe(true);
-    expect(isValid(Lib.tuple(Lib.Bool, Lib.Null))).toBe(true);
-    expect(isValid(Lib.allOf([Lib.Bool, Lib.Null]))).toBe(true);
-    expect(isValid(Lib.anyOf([Lib.Bool, Lib.Null]))).toBe(true);
-    expect(isValid(Lib.oneOf([Lib.Bool, Lib.Null]))).toBe(true);
-    expect(isValid(Lib.not(Lib.Bool))).toBe(true);
+    expect(isValid(Lib.record({ foo: Lib.BOOL }))).toBe(true);
+    expect(isValid(Lib.dict('23 < len <= 32', Lib.BOOL))).toBe(true);
+    expect(isValid(Lib.list('uniq, 2 < len < 3', Lib.BOOL))).toBe(true);
+    expect(isValid(Lib.tuple(Lib.BOOL, Lib.NULL))).toBe(true);
+    expect(isValid(Lib.allOf([Lib.BOOL, Lib.NULL]))).toBe(true);
+    expect(isValid(Lib.anyOf([Lib.BOOL, Lib.NULL]))).toBe(true);
+    expect(isValid(Lib.oneOf([Lib.BOOL, Lib.NULL]))).toBe(true);
+    expect(isValid(Lib.not(Lib.BOOL))).toBe(true);
   });
 });

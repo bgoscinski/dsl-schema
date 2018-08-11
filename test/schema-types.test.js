@@ -110,11 +110,11 @@ describe(T.record.name, () => {
   });
 
   it('should work', () => {
-    expect(T.record({ foo: T.int(), someProp: T.Bool })).toEqual({
+    expect(T.record({ foo: T.int(), someProp: T.BOOL })).toEqual({
       type: 'object',
       properties: {
         foo: T.int(),
-        someProp: T.Bool,
+        someProp: T.BOOL,
       },
       required: ['foo', 'someProp'],
       additionalProperties: false,
@@ -129,16 +129,16 @@ describe(T.dict.name, () => {
   });
 
   it('should work', () => {
-    expect(T.dict(T.Bool)).toEqual({
+    expect(T.dict(T.BOOL)).toEqual({
       type: 'object',
-      additionalProperties: T.Bool,
+      additionalProperties: T.BOOL,
     });
   });
 
   it('should allow to specify minItems and maxItems', () => {
-    expect(T.dict('1 < len <= 77', T.Bool)).toEqual({
+    expect(T.dict('1 < len <= 77', T.BOOL)).toEqual({
       type: 'object',
-      additionalProperties: T.Bool,
+      additionalProperties: T.BOOL,
       minItems: 2,
       maxItems: 77,
     });
@@ -153,26 +153,26 @@ describe(T.list.name, () => {
   });
 
   it('should allow to specify items schema', () => {
-    expect(T.list(T.Bool)).toEqual({
+    expect(T.list(T.BOOL)).toEqual({
       type: 'array',
-      items: T.Bool,
+      items: T.BOOL,
     });
   });
 
   it(`should suggest ${T.tuple.name} when called with multiple schemas`, () => {
-    expect(() => T.list(T.Bool, T.int())).toThrow(
+    expect(() => T.list(T.BOOL, T.int())).toThrow(
       `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
     );
 
-    expect(() => T.list([T.Bool, T.int()])).toThrow(
+    expect(() => T.list([T.BOOL, T.int()])).toThrow(
       `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
     );
 
-    expect(() => T.list('uniq', T.Bool, T.int())).toThrow(
+    expect(() => T.list('uniq', T.BOOL, T.int())).toThrow(
       `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
     );
 
-    expect(() => T.list('uniq', [T.Bool, T.int()])).toThrow(
+    expect(() => T.list('uniq', [T.BOOL, T.int()])).toThrow(
       `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
     );
   });
@@ -193,10 +193,10 @@ describe(T.list.name, () => {
   });
 
   it('should allow to specify all the things at the same time', () => {
-    expect(T.list('uniq, len > 5', T.Bool)).toEqual({
+    expect(T.list('uniq, len > 5', T.BOOL)).toEqual({
       type: 'array',
       uniqueItems: true,
-      items: T.Bool,
+      items: T.BOOL,
       minItems: 6,
     });
   });
@@ -218,21 +218,21 @@ describe(T.tuple.name, () => {
   });
 
   it('should accept multiple schemas', () => {
-    expect(T.tuple(T.Bool)).toEqual({
+    expect(T.tuple(T.BOOL)).toEqual({
       type: 'array',
-      items: [T.Bool],
+      items: [T.BOOL],
       additionalItems: false,
     });
 
-    expect(T.tuple(T.Bool, T.Null)).toEqual({
+    expect(T.tuple(T.BOOL, T.NULL)).toEqual({
       type: 'array',
-      items: [T.Bool, T.Null],
+      items: [T.BOOL, T.NULL],
       additionalItems: false,
     });
 
-    expect(T.tuple([], T.Bool, [T.int(), T.float()], T.Null)).toEqual({
+    expect(T.tuple([], T.BOOL, [T.int(), T.float()], T.NULL)).toEqual({
       type: 'array',
-      items: [T.Bool, T.int(), T.float(), T.Null],
+      items: [T.BOOL, T.int(), T.float(), T.NULL],
       additionalItems: false,
     });
   });

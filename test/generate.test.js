@@ -6,22 +6,22 @@ describe(G.sthLike.name, () => {
     const actual = G.sthLike({ foo: 3, asd: null });
     const expected = T.record({
       foo: T.int(),
-      asd: T.Null,
+      asd: T.NULL,
     });
     expect(actual).toEqual(expected);
   });
 
   it('given an example array should return a tuple schema', () => {
     const actual = G.sthLike([1, 2.3, 'foo', true, null]);
-    const expected = T.tuple(T.int(), T.float(), T.str(), T.Bool, T.Null);
+    const expected = T.tuple(T.int(), T.float(), T.str(), T.BOOL, T.NULL);
     expect(actual).toEqual(expected);
   });
 
   const primitives = [
-    ['null', null, T.Null],
-    ['undefined', undefined, T.Null],
-    ['true', true, T.Bool],
-    ['false', false, T.Bool],
+    ['null', null, T.NULL],
+    ['undefined', undefined, T.NULL],
+    ['true', true, T.BOOL],
+    ['false', false, T.BOOL],
     ['NaN', NaN, T.float()],
     ['0', 0, T.int()],
     ['-1.1', -1.1, T.float()],
