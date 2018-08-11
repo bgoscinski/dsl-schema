@@ -32,6 +32,7 @@ describe('public api', () => {
     Lib.sthLike.name,
     Lib.validatorFor.name,
     Lib.predicateFor.name,
+    Lib.assertFor.name,
   ];
 
   typeFactories.concat(otherFns).forEach(name => {
