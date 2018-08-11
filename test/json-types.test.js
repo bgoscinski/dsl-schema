@@ -49,7 +49,7 @@ const fixtures = [
   },
 ];
 
-fdescribe('json type predicates', () => {
+describe('json type predicates', () => {
   fixtures.forEach(({ pred, okVals }) => {
     const notOkVals = diff(vals, okVals);
 
