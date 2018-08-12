@@ -117,12 +117,9 @@ describe.each`
 
 describe(T.Record.name, () => {
   it('should require properties schemas as an arg', () => {
-    expect(() => T.Record()).toThrow(
-      /should be an object with schemas as values/
-    );
-    expect(() => T.Record(1)).toThrow(
-      /should be an object with schemas as values/
-    );
+    const error = 'should be an object with schemas as values';
+    expect(() => T.Record()).toThrow(error);
+    expect(() => T.Record(1)).toThrow(error);
   });
 
   it('should work', () => {
@@ -197,21 +194,11 @@ describe(T.List.name, () => {
   });
 
   it(`should suggest ${T.Tuple.name} when called with multiple schemas`, () => {
-    expect(() => T.List(T.BOOL, T.Int())).toThrow(
-      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
-    );
-
-    expect(() => T.List([T.BOOL, T.Int()])).toThrow(
-      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
-    );
-
-    expect(() => T.List('uniq', T.BOOL, T.Int())).toThrow(
-      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
-    );
-
-    expect(() => T.List('uniq', [T.BOOL, T.Int()])).toThrow(
-      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
-    );
+    const suggestion = `Did you mean ${T.Tuple.name}`;
+    expect(() => T.List(T.BOOL, T.Int())).toThrow(suggestion);
+    expect(() => T.List([T.BOOL, T.Int()])).toThrow(suggestion);
+    expect(() => T.List('uniq', T.BOOL, T.Int())).toThrow(suggestion);
+    expect(() => T.List('uniq', [T.BOOL, T.Int()])).toThrow(suggestion);
   });
 
   it('should allow to specify minItems and maxItems', () => {
@@ -295,10 +282,10 @@ describe(T.Tuple.name, () => {
 
 describe.each`
   factoryName     | propName   | error
-  ${T.AllOf.name} | ${'allOf'} | ${'`schemaN` should be a schema or array of schemas'}
-  ${T.AnyOf.name} | ${'anyOf'} | ${'`schemaN` should be a schema or array of schemas'}
-  ${T.OneOf.name} | ${'oneOf'} | ${'`schemaN` should be a schema or array of schemas'}
-  ${T.Not.name}   | ${'not'}   | ${'`schema` should be a schema'}
+  ${T.AllOf.name} | ${'allOf'} | ${'should be a schema or array of schemas'}
+  ${T.AnyOf.name} | ${'anyOf'} | ${'should be a schema or array of schemas'}
+  ${T.OneOf.name} | ${'oneOf'} | ${'should be a schema or array of schemas'}
+  ${T.Not.name}   | ${'not'}   | ${'should be a schema'}
 `('$factoryName factory', ({ factoryName, propName, error }) => {
   const factory = T[factoryName];
 
