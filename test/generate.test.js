@@ -4,8 +4,8 @@ import * as G from '../lib/generate';
 describe(G.sthLike.name, () => {
   it('given an example object should return a record schema', () => {
     const actual = G.sthLike({ foo: 3, asd: null });
-    const expected = T.record({
-      foo: T.int(),
+    const expected = T.Record({
+      foo: T.Int(),
       asd: T.NULL,
     });
     expect(actual).toEqual(expected);
@@ -13,7 +13,7 @@ describe(G.sthLike.name, () => {
 
   it('given an example array should return a tuple schema', () => {
     const actual = G.sthLike([1, 2.3, 'foo', true, null]);
-    const expected = T.tuple(T.int(), T.float(), T.str(), T.BOOL, T.NULL);
+    const expected = T.Tuple(T.Int(), T.Float(), T.Str(), T.BOOL, T.NULL);
     expect(actual).toEqual(expected);
   });
 
@@ -23,15 +23,15 @@ describe(G.sthLike.name, () => {
     ${'undefined'}          | ${undefined}                                 | ${T.NULL}
     ${'true'}               | ${true}                                      | ${T.BOOL}
     ${'false'}              | ${false}                                     | ${T.BOOL}
-    ${'NaN'}                | ${NaN}                                       | ${T.float()}
-    ${'0'}                  | ${0}                                         | ${T.int()}
-    ${'-1.1'}               | ${-1.1}                                      | ${T.float()}
-    ${'213'}                | ${213}                                       | ${T.int()}
-    ${'empty string'}       | ${''}                                        | ${T.str()}
-    ${'string'}             | ${'foo'}                                     | ${T.str()}
+    ${'NaN'}                | ${NaN}                                       | ${T.Float()}
+    ${'0'}                  | ${0}                                         | ${T.Int()}
+    ${'-1.1'}               | ${-1.1}                                      | ${T.Float()}
+    ${'213'}                | ${213}                                       | ${T.Int()}
+    ${'empty string'}       | ${''}                                        | ${T.Str()}
+    ${'string'}             | ${'foo'}                                     | ${T.Str()}
     ${'date-time'}          | ${new Date().toISOString()}                  | ${T.DATE_TIME}
     ${'URL'}                | ${'http://xx.xx/abc-d/e?123&x=3'}            | ${T.URL}
-    ${'e-mail without TLD'} | ${'asd@example'}                             | ${T.str()}
+    ${'e-mail without TLD'} | ${'asd@example'}                             | ${T.Str()}
     ${'e-mail with TLD'}    | ${'asd@example.com'}                         | ${T.EMAIL}
     ${'IPv4'}               | ${'1.1.1.1'}                                 | ${T.IPV4}
     ${'IPv6'}               | ${'2001:0db8:0000:0000:0000:ff00:0042:8329'} | ${T.IPV6}

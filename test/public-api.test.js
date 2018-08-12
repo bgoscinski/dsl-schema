@@ -4,18 +4,18 @@ import { isRegistered } from '../lib/register';
 
 describe('public api', () => {
   const typeFactories = [
-    Lib.str.name,
+    Lib.Str.name,
     // Lib.Pattern.name,
-    Lib.int.name,
-    Lib.float.name,
-    Lib.record.name,
-    Lib.dict.name,
-    Lib.list.name,
-    Lib.tuple.name,
-    Lib.allOf.name,
-    Lib.anyOf.name,
-    Lib.oneOf.name,
-    Lib.not.name,
+    Lib.Int.name,
+    Lib.Float.name,
+    Lib.Record.name,
+    Lib.Dict.name,
+    Lib.List.name,
+    Lib.Tuple.name,
+    Lib.AllOf.name,
+    Lib.AnyOf.name,
+    Lib.OneOf.name,
+    Lib.Not.name,
   ];
 
   const constantSchemas = [
@@ -69,20 +69,20 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     const actual = Lib.sthLike({
       foo: 'foo',
       bar: {
-        baz: [true, 2, Lib.str('len >= 5')],
+        baz: [true, 2, Lib.Str('len >= 5')],
         some: 'prop1',
         other: new String('prop'),
-        andSomeExplicitlySchemed: Lib.list(Lib.sthLike(3)),
+        andSomeExplicitlySchemed: Lib.List(Lib.sthLike(3)),
       },
     });
 
-    const expected = Lib.record({
-      foo: Lib.str(),
-      bar: Lib.record({
-        baz: Lib.tuple(Lib.BOOL, Lib.int(), Lib.str('len >= 5')),
-        some: Lib.str(),
-        other: Lib.str(),
-        andSomeExplicitlySchemed: Lib.list(Lib.int()),
+    const expected = Lib.Record({
+      foo: Lib.Str(),
+      bar: Lib.Record({
+        baz: Lib.Tuple(Lib.BOOL, Lib.Int(), Lib.Str('len >= 5')),
+        some: Lib.Str(),
+        other: Lib.Str(),
+        andSomeExplicitlySchemed: Lib.List(Lib.Int()),
       }),
     });
 
@@ -92,16 +92,16 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
   const isValid = Lib.predicateFor(draftv7);
 
   it(`should generate valid schema`, () => {
-    expect(isValid(Lib.str('1 < len < 321'))).toBe(true);
-    expect(isValid(Lib.int('1 < x < 23, 3.2n'))).toBe(true);
-    expect(isValid(Lib.float('1 <= x < 2, 0.1n'))).toBe(true);
-    expect(isValid(Lib.record({ foo: Lib.BOOL }))).toBe(true);
-    expect(isValid(Lib.dict('23 < len <= 32', Lib.BOOL))).toBe(true);
-    expect(isValid(Lib.list('uniq, 2 < len < 3', Lib.BOOL))).toBe(true);
-    expect(isValid(Lib.tuple(Lib.BOOL, Lib.NULL))).toBe(true);
-    expect(isValid(Lib.allOf([Lib.BOOL, Lib.NULL]))).toBe(true);
-    expect(isValid(Lib.anyOf([Lib.BOOL, Lib.NULL]))).toBe(true);
-    expect(isValid(Lib.oneOf([Lib.BOOL, Lib.NULL]))).toBe(true);
-    expect(isValid(Lib.not(Lib.BOOL))).toBe(true);
+    expect(isValid(Lib.Str('1 < len < 321'))).toBe(true);
+    expect(isValid(Lib.Int('1 < x < 23, 3.2n'))).toBe(true);
+    expect(isValid(Lib.Float('1 <= x < 2, 0.1n'))).toBe(true);
+    expect(isValid(Lib.Record({ foo: Lib.BOOL }))).toBe(true);
+    expect(isValid(Lib.Dict('23 < len <= 32', Lib.BOOL))).toBe(true);
+    expect(isValid(Lib.List('uniq, 2 < len < 3', Lib.BOOL))).toBe(true);
+    expect(isValid(Lib.Tuple(Lib.BOOL, Lib.NULL))).toBe(true);
+    expect(isValid(Lib.AllOf([Lib.BOOL, Lib.NULL]))).toBe(true);
+    expect(isValid(Lib.AnyOf([Lib.BOOL, Lib.NULL]))).toBe(true);
+    expect(isValid(Lib.OneOf([Lib.BOOL, Lib.NULL]))).toBe(true);
+    expect(isValid(Lib.Not(Lib.BOOL))).toBe(true);
   });
 });

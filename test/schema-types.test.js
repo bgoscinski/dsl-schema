@@ -1,42 +1,42 @@
 import * as T from '../lib/schema-types';
 
-describe(T.str.name, () => {
+describe(T.Str.name, () => {
   it('should just work', () => {
-    expect(T.str()).toEqual({ type: 'string' });
+    expect(T.Str()).toEqual({ type: 'string' });
   });
 
   it('should allow to specify minLength and maxLength', () => {
-    expect(T.str('1 < len <= 2')).toEqual({
+    expect(T.Str('1 < len <= 2')).toEqual({
       type: 'string',
       minLength: 2,
       maxLength: 2,
     });
 
-    expect(T.str('1 <= len < 2')).toEqual({
+    expect(T.Str('1 <= len < 2')).toEqual({
       type: 'string',
       minLength: 1,
       maxLength: 1,
     });
 
-    expect(T.str('1 <= len')).toEqual({
+    expect(T.Str('1 <= len')).toEqual({
       type: 'string',
       minLength: 1,
     });
 
-    expect(T.str('2 > len')).toEqual({
+    expect(T.Str('2 > len')).toEqual({
       type: 'string',
       maxLength: 1,
     });
   });
 
   it('should coerce non-integer lengths to ints', () => {
-    expect(T.str('1.2 < len < 4.3')).toEqual({
+    expect(T.Str('1.2 < len < 4.3')).toEqual({
       type: 'string',
       minLength: 2,
       maxLength: 4,
     });
 
-    expect(T.str('1.2 <= len <= 4.3')).toEqual({
+    expect(T.Str('1.2 <= len <= 4.3')).toEqual({
       type: 'string',
       minLength: 2,
       maxLength: 4,
@@ -46,8 +46,8 @@ describe(T.str.name, () => {
 
 describe.each`
   schemaType   | factory
-  ${'integer'} | ${T.int}
-  ${'number'}  | ${T.float}
+  ${'integer'} | ${T.Int}
+  ${'number'}  | ${T.Float}
 `('$schemaType', ({ schemaType, factory }) => {
   it('should just work', () => {
     expect(factory()).toEqual({ type: schemaType });
@@ -115,21 +115,21 @@ describe.each`
   });
 });
 
-describe(T.record.name, () => {
+describe(T.Record.name, () => {
   it('should require properties schemas as an arg', () => {
-    expect(() => T.record()).toThrow(
+    expect(() => T.Record()).toThrow(
       /should be an object with schemas as values/
     );
-    expect(() => T.record(1)).toThrow(
+    expect(() => T.Record(1)).toThrow(
       /should be an object with schemas as values/
     );
   });
 
   it('should work', () => {
-    expect(T.record({ foo: T.int(), someProp: T.BOOL })).toEqual({
+    expect(T.Record({ foo: T.Int(), someProp: T.BOOL })).toEqual({
       type: 'object',
       properties: {
-        foo: T.int(),
+        foo: T.Int(),
         someProp: T.BOOL,
       },
       required: ['foo', 'someProp'],
@@ -138,42 +138,42 @@ describe(T.record.name, () => {
   });
 });
 
-describe(T.dict.name, () => {
+describe(T.Dict.name, () => {
   it('should require item schema as an arg', () => {
-    expect(() => T.dict()).toThrow(/should be a schema/);
-    expect(() => T.dict(1)).toThrow(/should be a schema/);
+    expect(() => T.Dict()).toThrow(/should be a schema/);
+    expect(() => T.Dict(1)).toThrow(/should be a schema/);
   });
 
   it('should work', () => {
-    expect(T.dict(T.BOOL)).toEqual({
+    expect(T.Dict(T.BOOL)).toEqual({
       type: 'object',
       additionalProperties: T.BOOL,
     });
   });
 
   it('should allow to specify minItems and maxItems', () => {
-    expect(T.dict('1 < len < 77', T.BOOL)).toEqual({
+    expect(T.Dict('1 < len < 77', T.BOOL)).toEqual({
       type: 'object',
       additionalProperties: T.BOOL,
       minItems: 2,
       maxItems: 76,
     });
 
-    expect(T.dict('1 <= length <= 77', T.BOOL)).toEqual({
+    expect(T.Dict('1 <= length <= 77', T.BOOL)).toEqual({
       type: 'object',
       additionalProperties: T.BOOL,
       minItems: 1,
       maxItems: 77,
     });
 
-    expect(T.dict('1.3 < size < 77.8', T.BOOL)).toEqual({
+    expect(T.Dict('1.3 < size < 77.8', T.BOOL)).toEqual({
       type: 'object',
       additionalProperties: T.BOOL,
       minItems: 2,
       maxItems: 77,
     });
 
-    expect(T.dict('1.3 <= size <= 77.8', T.BOOL)).toEqual({
+    expect(T.Dict('1.3 <= size <= 77.8', T.BOOL)).toEqual({
       type: 'object',
       additionalProperties: T.BOOL,
       minItems: 2,
@@ -182,58 +182,58 @@ describe(T.dict.name, () => {
   });
 });
 
-describe(T.list.name, () => {
+describe(T.List.name, () => {
   it('should just work', () => {
-    expect(T.list()).toEqual({
+    expect(T.List()).toEqual({
       type: 'array',
     });
   });
 
   it('should allow to specify items schema', () => {
-    expect(T.list(T.BOOL)).toEqual({
+    expect(T.List(T.BOOL)).toEqual({
       type: 'array',
       items: T.BOOL,
     });
   });
 
-  it(`should suggest ${T.tuple.name} when called with multiple schemas`, () => {
-    expect(() => T.list(T.BOOL, T.int())).toThrow(
-      `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
+  it(`should suggest ${T.Tuple.name} when called with multiple schemas`, () => {
+    expect(() => T.List(T.BOOL, T.Int())).toThrow(
+      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
     );
 
-    expect(() => T.list([T.BOOL, T.int()])).toThrow(
-      `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
+    expect(() => T.List([T.BOOL, T.Int()])).toThrow(
+      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
     );
 
-    expect(() => T.list('uniq', T.BOOL, T.int())).toThrow(
-      `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
+    expect(() => T.List('uniq', T.BOOL, T.Int())).toThrow(
+      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
     );
 
-    expect(() => T.list('uniq', [T.BOOL, T.int()])).toThrow(
-      `Did you mean ${T.tuple.name}(schema0, schema1, ...)?`
+    expect(() => T.List('uniq', [T.BOOL, T.Int()])).toThrow(
+      `Did you mean ${T.Tuple.name}(schema0, schema1, ...)?`
     );
   });
 
   it('should allow to specify minItems and maxItems', () => {
-    expect(T.list('3 < len < 23')).toEqual({
+    expect(T.List('3 < len < 23')).toEqual({
       type: 'array',
       minItems: 4,
       maxItems: 22,
     });
 
-    expect(T.list('3 <= size <= 23')).toEqual({
+    expect(T.List('3 <= size <= 23')).toEqual({
       type: 'array',
       minItems: 3,
       maxItems: 23,
     });
 
-    expect(T.list('3.5 < length < 23.4')).toEqual({
+    expect(T.List('3.5 < length < 23.4')).toEqual({
       type: 'array',
       minItems: 4,
       maxItems: 23,
     });
 
-    expect(T.list('3.5 <= len <= 23.4')).toEqual({
+    expect(T.List('3.5 <= len <= 23.4')).toEqual({
       type: 'array',
       minItems: 4,
       maxItems: 23,
@@ -241,14 +241,14 @@ describe(T.list.name, () => {
   });
 
   it('should allow to specify uniqueness', () => {
-    expect(T.list('uniq')).toEqual({
+    expect(T.List('uniq')).toEqual({
       type: 'array',
       uniqueItems: true,
     });
   });
 
   it('should allow to specify all the things at the same time', () => {
-    expect(T.list('uniq, len > 5', T.BOOL)).toEqual({
+    expect(T.List('uniq, len > 5', T.BOOL)).toEqual({
       type: 'array',
       uniqueItems: true,
       items: T.BOOL,
@@ -257,15 +257,15 @@ describe(T.list.name, () => {
   });
 });
 
-describe(T.tuple.name, () => {
+describe(T.Tuple.name, () => {
   it('should create empty tuple schema when called without args', () => {
-    expect(T.tuple()).toEqual({
+    expect(T.Tuple()).toEqual({
       type: 'array',
       items: [],
       additionalItems: false,
     });
 
-    expect(T.tuple([])).toEqual({
+    expect(T.Tuple([])).toEqual({
       type: 'array',
       items: [],
       additionalItems: false,
@@ -273,21 +273,21 @@ describe(T.tuple.name, () => {
   });
 
   it('should accept multiple schemas', () => {
-    expect(T.tuple(T.BOOL)).toEqual({
+    expect(T.Tuple(T.BOOL)).toEqual({
       type: 'array',
       items: [T.BOOL],
       additionalItems: false,
     });
 
-    expect(T.tuple(T.BOOL, T.NULL)).toEqual({
+    expect(T.Tuple(T.BOOL, T.NULL)).toEqual({
       type: 'array',
       items: [T.BOOL, T.NULL],
       additionalItems: false,
     });
 
-    expect(T.tuple([], T.BOOL, [T.int(), T.float()], T.NULL)).toEqual({
+    expect(T.Tuple([], T.BOOL, [T.Int(), T.Float()], T.NULL)).toEqual({
       type: 'array',
-      items: [T.BOOL, T.int(), T.float(), T.NULL],
+      items: [T.BOOL, T.Int(), T.Float(), T.NULL],
       additionalItems: false,
     });
   });
@@ -295,10 +295,10 @@ describe(T.tuple.name, () => {
 
 describe.each`
   factoryName     | propName   | error
-  ${T.allOf.name} | ${'allOf'} | ${'allOf(schema0, schema1, ...): `schemaN` should be a schema or array of schemas'}
-  ${T.anyOf.name} | ${'anyOf'} | ${'anyOf(schema0, schema1, ...): `schemaN` should be a schema or array of schemas'}
-  ${T.oneOf.name} | ${'oneOf'} | ${'oneOf(schema0, schema1, ...): `schemaN` should be a schema or array of schemas'}
-  ${T.not.name}   | ${'not'}   | ${'not(schema): `schema` should be a schema'}
+  ${T.AllOf.name} | ${'allOf'} | ${'`schemaN` should be a schema or array of schemas'}
+  ${T.AnyOf.name} | ${'anyOf'} | ${'`schemaN` should be a schema or array of schemas'}
+  ${T.OneOf.name} | ${'oneOf'} | ${'`schemaN` should be a schema or array of schemas'}
+  ${T.Not.name}   | ${'not'}   | ${'`schema` should be a schema'}
 `('$factoryName factory', ({ factoryName, propName, error }) => {
   const factory = T[factoryName];
 
@@ -318,20 +318,20 @@ describe(T.isSchema.name, () => {
     expect(T.isSchema({})).toBe(false);
     expect(T.isSchema([])).toBe(false);
 
-    expect(T.isSchema(T.str())).toBe(true);
-    expect(T.isSchema(T.int())).toBe(true);
-    expect(T.isSchema(T.float())).toBe(true);
-    expect(T.isSchema(T.record({}))).toBe(true);
-    expect(T.isSchema(T.dict(T.int()))).toBe(true);
-    expect(T.isSchema(T.list())).toBe(true);
-    expect(T.isSchema(T.tuple())).toBe(true);
+    expect(T.isSchema(T.Str())).toBe(true);
+    expect(T.isSchema(T.Int())).toBe(true);
+    expect(T.isSchema(T.Float())).toBe(true);
+    expect(T.isSchema(T.Record({}))).toBe(true);
+    expect(T.isSchema(T.Dict(T.Int()))).toBe(true);
+    expect(T.isSchema(T.List())).toBe(true);
+    expect(T.isSchema(T.Tuple())).toBe(true);
 
-    expect(T.isSchema(T.allOf())).toBe(true);
-    expect(T.isSchema(T.allOf(T.int(), T.float()))).toBe(true);
-    expect(T.isSchema(T.anyOf())).toBe(true);
-    expect(T.isSchema(T.anyOf(T.int(), T.float()))).toBe(true);
-    expect(T.isSchema(T.oneOf(T.int(), T.float()))).toBe(true);
-    expect(T.isSchema(T.oneOf(T.int(), T.float()))).toBe(true);
-    expect(T.isSchema(T.not(T.int()))).toBe(true);
+    expect(T.isSchema(T.AllOf())).toBe(true);
+    expect(T.isSchema(T.AllOf(T.Int(), T.Float()))).toBe(true);
+    expect(T.isSchema(T.AnyOf())).toBe(true);
+    expect(T.isSchema(T.AnyOf(T.Int(), T.Float()))).toBe(true);
+    expect(T.isSchema(T.OneOf(T.Int(), T.Float()))).toBe(true);
+    expect(T.isSchema(T.OneOf(T.Int(), T.Float()))).toBe(true);
+    expect(T.isSchema(T.Not(T.Int()))).toBe(true);
   });
 });
