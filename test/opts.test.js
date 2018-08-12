@@ -70,4 +70,16 @@ describe('Opts.parse', () => {
       type: 'uniq',
     });
   });
+
+  it('should handle multiple opts', () => {
+    expect(parse('3 <= x, uniq, y >= 4')).toEqual([
+      { type: 'range', binding: 'x', min: 3 },
+      { type: 'uniq' },
+      { type: 'range', binding: 'y', min: 4 },
+    ]);
+  });
+
+  it('should filter out unrecognized opts', () => {
+    expect(parse(',2 < x >= 3, foo, 7*7,1*c*3, , 3n,')).toEqual([]);
+  });
 });
