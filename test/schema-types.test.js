@@ -152,7 +152,28 @@ describe(T.dict.name, () => {
   });
 
   it('should allow to specify minItems and maxItems', () => {
-    expect(T.dict('1 < len <= 77', T.BOOL)).toEqual({
+    expect(T.dict('1 < len < 77', T.BOOL)).toEqual({
+      type: 'object',
+      additionalProperties: T.BOOL,
+      minItems: 2,
+      maxItems: 76,
+    });
+
+    expect(T.dict('1 <= length <= 77', T.BOOL)).toEqual({
+      type: 'object',
+      additionalProperties: T.BOOL,
+      minItems: 1,
+      maxItems: 77,
+    });
+
+    expect(T.dict('1.3 < size < 77.8', T.BOOL)).toEqual({
+      type: 'object',
+      additionalProperties: T.BOOL,
+      minItems: 2,
+      maxItems: 77,
+    });
+
+    expect(T.dict('1.3 <= size <= 77.8', T.BOOL)).toEqual({
       type: 'object',
       additionalProperties: T.BOOL,
       minItems: 2,
@@ -194,7 +215,25 @@ describe(T.list.name, () => {
   });
 
   it('should allow to specify minItems and maxItems', () => {
-    expect(T.list('3 < len <= 23')).toEqual({
+    expect(T.list('3 < len < 23')).toEqual({
+      type: 'array',
+      minItems: 4,
+      maxItems: 22,
+    });
+
+    expect(T.list('3 <= size <= 23')).toEqual({
+      type: 'array',
+      minItems: 3,
+      maxItems: 23,
+    });
+
+    expect(T.list('3.5 < length < 23.4')).toEqual({
+      type: 'array',
+      minItems: 4,
+      maxItems: 23,
+    });
+
+    expect(T.list('3.5 <= len <= 23.4')).toEqual({
       type: 'array',
       minItems: 4,
       maxItems: 23,
@@ -251,6 +290,24 @@ describe(T.tuple.name, () => {
       items: [T.BOOL, T.int(), T.float(), T.NULL],
       additionalItems: false,
     });
+  });
+});
+
+describe.each`
+  factoryName     | propName   | error
+  ${T.allOf.name} | ${'allOf'} | ${'allOf(schema0, schema1, ...): `schemaN` should be a schema or array of schemas'}
+  ${T.anyOf.name} | ${'anyOf'} | ${'anyOf(schema0, schema1, ...): `schemaN` should be a schema or array of schemas'}
+  ${T.oneOf.name} | ${'oneOf'} | ${'oneOf(schema0, schema1, ...): `schemaN` should be a schema or array of schemas'}
+  ${T.not.name}   | ${'not'}   | ${'not(schema): `schema` should be a schema'}
+`('$factoryName factory', ({ factoryName, propName, error }) => {
+  const factory = T[factoryName];
+
+  it('should produce schema', () => {
+    expect(factory(T.BOOL)[propName]).toBeTruthy();
+  });
+
+  it('should throw when passed non schema args', () => {
+    expect(() => factory(3)).toThrow(error);
   });
 });
 
