@@ -12,6 +12,7 @@ describe('public api', () => {
     Lib.Dict.name,
     Lib.List.name,
     Lib.Tuple.name,
+    Lib.Enum.name,
     Lib.AllOf.name,
     Lib.AnyOf.name,
     Lib.OneOf.name,
@@ -99,6 +100,7 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     expect(isValid(Lib.Dict('23 < len <= 32', Lib.BOOL))).toBe(true);
     expect(isValid(Lib.List('uniq, 2 < len < 3', Lib.BOOL))).toBe(true);
     expect(isValid(Lib.Tuple(Lib.BOOL, Lib.NULL))).toBe(true);
+    expect(isValid(Lib.Enum(true, false, 1, 2))).toBe(true);
     expect(isValid(Lib.AllOf([Lib.BOOL, Lib.NULL]))).toBe(true);
     expect(isValid(Lib.AnyOf([Lib.BOOL, Lib.NULL]))).toBe(true);
     expect(isValid(Lib.OneOf([Lib.BOOL, Lib.NULL]))).toBe(true);

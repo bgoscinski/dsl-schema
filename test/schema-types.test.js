@@ -280,6 +280,27 @@ describe(T.Tuple.name, () => {
   });
 });
 
+describe(T.Enum.name, () => {
+  it('should take primitives or arrays of primitives', () => {
+    expect(T.Enum(1, [2])).toEqual({
+      enum: [1, 2],
+    });
+
+    expect(() => T.Enum([[3]])).toThrow('should contain only primitives');
+  });
+
+  it('should throw when empty', () => {
+    expect(() => T.Enum()).toThrow('should be nonempty');
+    expect(() => T.Enum([])).toThrow('should be nonempty');
+  });
+
+  it('should throw on duplicated options', () => {
+    expect(() => T.Enum(1, [1])).toThrow('should be unique');
+    expect(() => T.Enum([1], [1])).toThrow('should be unique');
+    expect(() => T.Enum(1, [], 1)).toThrow('should be unique');
+  });
+});
+
 describe.each`
   factoryName     | propName   | error
   ${T.AllOf.name} | ${'allOf'} | ${'should be a schema or array of schemas'}
@@ -312,6 +333,7 @@ describe(T.isSchema.name, () => {
     expect(T.isSchema(T.Dict(T.Int()))).toBe(true);
     expect(T.isSchema(T.List())).toBe(true);
     expect(T.isSchema(T.Tuple())).toBe(true);
+    expect(T.isSchema(T.Enum(3))).toBe(true);
 
     expect(T.isSchema(T.AllOf())).toBe(true);
     expect(T.isSchema(T.AllOf(T.Int(), T.Float()))).toBe(true);
