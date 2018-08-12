@@ -61,7 +61,7 @@ describe(T.str.name, () => {
         multipleOf: 3,
       });
 
-      expect(factory('1.3n')).toEqual({
+      expect(factory('1.3*n')).toEqual({
         type: schemaType,
         multipleOf: 1.3,
       });
@@ -104,7 +104,7 @@ describe(T.str.name, () => {
     });
 
     it('should allow to specify range and multipleOf at the same time', () => {
-      expect(factory('12n, x > 6')).toEqual({
+      expect(factory('12*n, x > 6')).toEqual({
         type: schemaType,
         exclusiveMinimum: 6,
         multipleOf: 12,
