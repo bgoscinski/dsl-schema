@@ -1,5 +1,6 @@
 import * as Lib from '../lib';
 import draftv7 from 'ajv/lib/refs/json-schema-draft-07.json';
+import { isRegistered } from '../lib/register';
 
 describe('public api', () => {
   const typeFactories = [
@@ -17,7 +18,7 @@ describe('public api', () => {
     Lib.not.name,
   ];
 
-  const constants = [
+  const constantSchemas = [
     'BOOL',
     'NULL',
     'DATE',
@@ -48,14 +49,15 @@ describe('public api', () => {
     });
   });
 
-  constants.forEach(name => {
-    it(`should expose ${name} constant`, () => {
+  constantSchemas.forEach(name => {
+    it(`should expose ${name} constant schema`, () => {
       expect(typeof Lib[name]).toBe('object');
+      expect(isRegistered(Lib[name])).toBe(true);
     });
   });
 
   it(`should not expose anything else`, () => {
-    const all = [].concat(typeFactories, constants, otherFns);
+    const all = [].concat(typeFactories, constantSchemas, otherFns);
     for (const key in Lib) {
       expect(all).toContain(key);
     }
