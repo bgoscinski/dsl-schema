@@ -20,12 +20,19 @@ describe('public api', () => {
   const constants = [
     'BOOL',
     'NULL',
-    // 'DateTime',
-    // 'Email',
-    // 'Hostname',
-    // 'Ipv4',
-    // 'Ipv6',
-    // 'Uri',
+    'DATE',
+    'TIME',
+    'DATE_TIME',
+    'URI',
+    'URI_REFERENCE',
+    'URI_TEMPLATE',
+    'URL',
+    'EMAIL',
+    'HOSTNAME',
+    'IPV4',
+    'IPV6',
+    'REGEX',
+    'UUID',
   ];
 
   const otherFns = [
