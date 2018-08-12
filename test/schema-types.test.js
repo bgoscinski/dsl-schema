@@ -44,71 +44,73 @@ describe(T.str.name, () => {
   });
 });
 
-[[T.int, 'integer'], [T.float, 'number']].forEach(([factory, schemaType]) => {
-  describe(factory.name, () => {
-    it('should just work', () => {
-      expect(factory()).toEqual({ type: schemaType });
+describe.each`
+  schemaType   | factory
+  ${'integer'} | ${T.int}
+  ${'number'}  | ${T.float}
+`('$schemaType', ({ schemaType, factory }) => {
+  it('should just work', () => {
+    expect(factory()).toEqual({ type: schemaType });
+  });
+
+  it('should allow to specify multipleOf prop', () => {
+    expect(factory('n * 3')).toEqual({
+      type: schemaType,
+      multipleOf: 3,
     });
 
-    it('should allow to specify multipleOf prop', () => {
-      expect(factory('n * 3')).toEqual({
-        type: schemaType,
-        multipleOf: 3,
-      });
-
-      expect(factory('3*n')).toEqual({
-        type: schemaType,
-        multipleOf: 3,
-      });
-
-      expect(factory('1.3*n')).toEqual({
-        type: schemaType,
-        multipleOf: 1.3,
-      });
+    expect(factory('3*n')).toEqual({
+      type: schemaType,
+      multipleOf: 3,
     });
 
-    it('should allow to specify range', () => {
-      expect(factory('1 < x < 5')).toEqual({
-        type: schemaType,
-        exclusiveMinimum: 1,
-        exclusiveMaximum: 5,
-      });
+    expect(factory('1.3*n')).toEqual({
+      type: schemaType,
+      multipleOf: 1.3,
+    });
+  });
 
-      expect(factory('1.1 <= x <= 5')).toEqual({
-        type: schemaType,
-        minimum: 1.1,
-        maximum: 5,
-      });
-
-      expect(factory('5 > x > 1')).toEqual({
-        type: schemaType,
-        exclusiveMinimum: 1,
-        exclusiveMaximum: 5,
-      });
-
-      expect(factory('5.6 >= x >= 1')).toEqual({
-        type: schemaType,
-        minimum: 1,
-        maximum: 5.6,
-      });
-
-      expect(factory('5 < x')).toEqual({
-        type: schemaType,
-        exclusiveMinimum: 5,
-      });
-
-      expect(factory('5.78 >= x')).toEqual({
-        type: schemaType,
-        maximum: 5.78,
-      });
+  it('should allow to specify range', () => {
+    expect(factory('1 < x < 5')).toEqual({
+      type: schemaType,
+      exclusiveMinimum: 1,
+      exclusiveMaximum: 5,
     });
 
-    it('should allow to specify range and multipleOf at the same time', () => {
-      expect(factory('12*n, x > 6')).toEqual({
-        type: schemaType,
-        exclusiveMinimum: 6,
-        multipleOf: 12,
-      });
+    expect(factory('1.1 <= x <= 5')).toEqual({
+      type: schemaType,
+      minimum: 1.1,
+      maximum: 5,
+    });
+
+    expect(factory('5 > x > 1')).toEqual({
+      type: schemaType,
+      exclusiveMinimum: 1,
+      exclusiveMaximum: 5,
+    });
+
+    expect(factory('5.6 >= x >= 1')).toEqual({
+      type: schemaType,
+      minimum: 1,
+      maximum: 5.6,
+    });
+
+    expect(factory('5 < x')).toEqual({
+      type: schemaType,
+      exclusiveMinimum: 5,
+    });
+
+    expect(factory('5.78 >= x')).toEqual({
+      type: schemaType,
+      maximum: 5.78,
+    });
+  });
+
+  it('should allow to specify range and multipleOf at the same time', () => {
+    expect(factory('12*n, x > 6')).toEqual({
+      type: schemaType,
+      exclusiveMinimum: 6,
+      multipleOf: 12,
     });
   });
 });

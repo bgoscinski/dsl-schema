@@ -25,49 +25,27 @@ const vals = {
 const diff = (all, toRemove) =>
   Array.from(Object.values(all)).filter(v => !toRemove.includes(v));
 
-const fixtures = [
-  {
-    pred: P.isArrayLike,
-    okVals: [vals.array, vals.arrayInstance, vals.arguments],
-  },
-  {
-    pred: P.isBooleanLike,
-    okVals: [vals.booleanInstance, vals.true, vals.false],
-  },
-  {
-    pred: P.isNullLike,
-    okVals: [vals.null, vals.undefined],
-  },
-  {
-    pred: P.isNumberLike,
-    okVals: [vals.number, vals.NaN, vals.numberInstance],
-  },
-  {
-    pred: P.isObjectLike,
-    okVals: [vals.pojo, vals.classInstance],
-  },
-  {
-    pred: P.isStringLike,
-    okVals: [vals.stringInstance, vals.string],
-  },
-];
+describe.each`
+  predicate               | okVals
+  ${P.isArrayLike.name}   | ${[vals.array, vals.arrayInstance, vals.arguments]}
+  ${P.isBooleanLike.name} | ${[vals.booleanInstance, vals.true, vals.false]}
+  ${P.isNullLike.name}    | ${[vals.null, vals.undefined]}
+  ${P.isNumberLike.name}  | ${[vals.number, vals.NaN, vals.numberInstance]}
+  ${P.isObjectLike.name}  | ${[vals.pojo, vals.classInstance]}
+  ${P.isStringLike.name}  | ${[vals.stringInstance, vals.string]}
+`('json type predicate $predicate', ({ predicate, okVals }) => {
+  const pred = P[predicate];
+  const notOkVals = diff(vals, okVals);
 
-describe('json type predicates', () => {
-  fixtures.forEach(({ pred, okVals }) => {
-    const notOkVals = diff(vals, okVals);
+  okVals.forEach(([name, val]) => {
+    it('should return `true` for ' + name, () => {
+      expect(pred(val)).toBe(true);
+    });
+  });
 
-    describe(pred.name, () => {
-      okVals.forEach(([name, val]) => {
-        it('should return `true` for ' + name, () => {
-          expect(pred(val)).toBe(true);
-        });
-      });
-
-      notOkVals.forEach(([name, val]) => {
-        it('should return `false` for ' + name, () => {
-          expect(pred(val)).toBe(false);
-        });
-      });
+  notOkVals.forEach(([name, val]) => {
+    it('should return `false` for ' + name, () => {
+      expect(pred(val)).toBe(false);
     });
   });
 });
