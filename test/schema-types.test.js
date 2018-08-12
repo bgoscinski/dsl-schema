@@ -28,6 +28,20 @@ describe(T.str.name, () => {
       maxLength: 1,
     });
   });
+
+  it('should coerce non-integer lengths to ints', () => {
+    expect(T.str('1.2 < len < 4.3')).toEqual({
+      type: 'string',
+      minLength: 2,
+      maxLength: 4,
+    });
+
+    expect(T.str('1.2 <= len <= 4.3')).toEqual({
+      type: 'string',
+      minLength: 2,
+      maxLength: 4,
+    });
+  });
 });
 
 [[T.int, 'integer'], [T.float, 'number']].forEach(([factory, schemaType]) => {
