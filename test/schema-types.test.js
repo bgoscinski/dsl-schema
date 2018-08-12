@@ -251,3 +251,28 @@ describe(T.tuple.name, () => {
     });
   });
 });
+
+describe(T.isSchema.name, () => {
+  it('should just work', () => {
+    expect(T.isSchema()).toBe(false);
+    expect(T.isSchema(42)).toBe(false);
+    expect(T.isSchema({})).toBe(false);
+    expect(T.isSchema([])).toBe(false);
+
+    expect(T.isSchema(T.str())).toBe(true);
+    expect(T.isSchema(T.int())).toBe(true);
+    expect(T.isSchema(T.float())).toBe(true);
+    expect(T.isSchema(T.record({}))).toBe(true);
+    expect(T.isSchema(T.dict(T.int()))).toBe(true);
+    expect(T.isSchema(T.list())).toBe(true);
+    expect(T.isSchema(T.tuple())).toBe(true);
+
+    expect(T.isSchema(T.allOf())).toBe(true);
+    expect(T.isSchema(T.allOf(T.int(), T.float()))).toBe(true);
+    expect(T.isSchema(T.anyOf())).toBe(true);
+    expect(T.isSchema(T.anyOf(T.int(), T.float()))).toBe(true);
+    expect(T.isSchema(T.oneOf(T.int(), T.float()))).toBe(true);
+    expect(T.isSchema(T.oneOf(T.int(), T.float()))).toBe(true);
+    expect(T.isSchema(T.not(T.int()))).toBe(true);
+  });
+});
