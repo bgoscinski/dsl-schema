@@ -16,8 +16,6 @@ describe('Opts.parse', () => {
       binding: 'foo',
       min: 1,
       max: 2,
-      exclusiveMin: false,
-      exclusiveMax: false,
     });
   });
 
@@ -33,7 +31,6 @@ describe('Opts.parse', () => {
       type: 'range',
       binding: 'var',
       min: 1,
-      exclusiveMin: false,
     });
 
     expect(parse('1000000000 > var')[0]).toEqual({
@@ -47,7 +44,6 @@ describe('Opts.parse', () => {
       type: 'range',
       binding: 'var',
       max: 1,
-      exclusiveMax: false,
     });
   });
 
