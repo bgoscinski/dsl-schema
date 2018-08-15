@@ -1,4 +1,5 @@
 import * as Lib from '../lib';
+import Ajv from 'ajv';
 import draftv7 from 'ajv/lib/refs/json-schema-draft-07.json';
 import { isRegistered } from '../lib/register';
 
@@ -37,12 +38,7 @@ describe('public api', () => {
     'UUID',
   ];
 
-  const otherFns = [
-    Lib.sthLike.name,
-    Lib.validatorFor.name,
-    Lib.predicateFor.name,
-    Lib.assertFor.name,
-  ];
+  const otherFns = [Lib.sthLike.name];
 
   typeFactories.concat(otherFns).forEach(name => {
     it(`should expose ${name} factory`, () => {
@@ -90,7 +86,7 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     expect(actual).toEqual(expected);
   });
 
-  const isValid = Lib.predicateFor(draftv7);
+  const isValid = new Ajv({ format: 'full' }).compile(draftv7);
 
   it(`should generate valid schema`, () => {
     expect(isValid(Lib.Str('1 < len < 321'))).toBe(true);
