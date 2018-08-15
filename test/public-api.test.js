@@ -38,7 +38,7 @@ describe('public api', () => {
     'UUID',
   ];
 
-  const otherFns = [Lib.sthLike.name];
+  const otherFns = [Lib.sthLike.name, Lib.req.name, Lib.opt.name];
 
   typeFactories.concat(otherFns).forEach(name => {
     it(`should expose ${name} factory`, () => {
@@ -74,13 +74,15 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     });
 
     const expected = Lib.Record({
-      foo: Lib.Str(),
-      bar: Lib.Record({
-        baz: Lib.Tuple(Lib.BOOL, Lib.Int(), Lib.Str('len >= 5')),
-        some: Lib.Str(),
-        other: Lib.Str(),
-        andSomeExplicitlySchemed: Lib.List(Lib.Int()),
-      }),
+      foo: Lib.req(Lib.Str()),
+      bar: Lib.req(
+        Lib.Record({
+          baz: Lib.req(Lib.Tuple(Lib.BOOL, Lib.Int(), Lib.Str('len >= 5'))),
+          some: Lib.req(Lib.Str()),
+          other: Lib.req(Lib.Str()),
+          andSomeExplicitlySchemed: Lib.req(Lib.List(Lib.Int())),
+        })
+      ),
     });
 
     expect(actual).toEqual(expected);
@@ -92,7 +94,7 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     expect(isValid(Lib.Str('1 < len < 321'))).toBe(true);
     expect(isValid(Lib.Int('1 < x < 23, 3.2n'))).toBe(true);
     expect(isValid(Lib.Float('1 <= x < 2, 0.1n'))).toBe(true);
-    expect(isValid(Lib.Record({ foo: Lib.BOOL }))).toBe(true);
+    expect(isValid(Lib.Record({ foo: Lib.req(Lib.BOOL) }))).toBe(true);
     expect(isValid(Lib.Dict('23 < len <= 32', Lib.BOOL))).toBe(true);
     expect(isValid(Lib.List('uniq, 2 < len < 3', Lib.BOOL))).toBe(true);
     expect(isValid(Lib.Tuple(Lib.BOOL, Lib.NULL))).toBe(true);

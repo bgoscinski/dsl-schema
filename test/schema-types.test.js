@@ -116,20 +116,29 @@ describe.each`
 });
 
 describe(T.Record.name, () => {
-  it('should require properties schemas as an arg', () => {
-    const error = 'should be an object with schemas as values';
-    expect(() => T.Record()).toThrow(error);
-    expect(() => T.Record(1)).toThrow(error);
+  it('should require tagged schema dict as an argument', () => {
+    const invalidType = 'should be an object';
+    const notTagged = 'members are not tagged';
+    expect(() => T.Record()).toThrow(invalidType);
+    expect(() => T.Record(1)).toThrow(invalidType);
+    expect(() => T.Record([])).toThrow(invalidType);
+    expect(() => T.Record({ x: 4 })).toThrow(notTagged);
+    expect(() => T.Record({ x: [] })).toThrow(notTagged);
   });
 
   it('should work', () => {
-    expect(T.Record({ foo: T.Int(), someProp: T.BOOL })).toEqual({
+    const schema = T.Record({
+      foo: T.opt(T.Int()),
+      someProp: T.req(T.BOOL),
+    });
+
+    expect(schema).toEqual({
       type: 'object',
       properties: {
         foo: T.Int(),
         someProp: T.BOOL,
       },
-      required: ['foo', 'someProp'],
+      required: ['someProp'],
       additionalProperties: false,
     });
   });

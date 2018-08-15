@@ -5,8 +5,8 @@ describe(G.sthLike.name, () => {
   it('given an example object should return a record schema', () => {
     const actual = G.sthLike({ foo: 3, asd: null });
     const expected = T.Record({
-      foo: T.Int(),
-      asd: T.NULL,
+      foo: T.req(T.Int()),
+      asd: T.req(T.NULL),
     });
     expect(actual).toEqual(expected);
   });
