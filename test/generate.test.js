@@ -13,7 +13,9 @@ describe(G.sthLike.name, () => {
 
   it('given an example array should return a tuple schema', () => {
     const actual = G.sthLike([1, 2.3, 'foo', true, null]);
-    const expected = T.Tuple(T.Int(), T.Float(), T.Str(), T.BOOL, T.NULL);
+    const expected = T.Tuple(
+      [T.Int(), T.Float(), T.Str(), T.BOOL, T.NULL].map(T.req)
+    );
     expect(actual).toEqual(expected);
   });
 

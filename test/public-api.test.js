@@ -77,7 +77,9 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
       foo: Lib.req(Lib.Str()),
       bar: Lib.req(
         Lib.Record({
-          baz: Lib.req(Lib.Tuple(Lib.BOOL, Lib.Int(), Lib.Str('len >= 5'))),
+          baz: Lib.req(
+            Lib.Tuple([Lib.BOOL, Lib.Int(), Lib.Str('len >= 5')].map(Lib.req))
+          ),
           some: Lib.req(Lib.Str()),
           other: Lib.req(Lib.Str()),
           andSomeExplicitlySchemed: Lib.req(Lib.List(Lib.Int())),
@@ -97,7 +99,7 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
     expect(isValid(Lib.Record({ foo: Lib.req(Lib.BOOL) }))).toBe(true);
     expect(isValid(Lib.Dict('23 < len <= 32', Lib.BOOL))).toBe(true);
     expect(isValid(Lib.List('uniq, 2 < len < 3', Lib.BOOL))).toBe(true);
-    expect(isValid(Lib.Tuple(Lib.BOOL, Lib.NULL))).toBe(true);
+    expect(isValid(Lib.Tuple(Lib.req(Lib.BOOL), Lib.req(Lib.NULL)))).toBe(true);
     expect(isValid(Lib.Enum(true, false, 1, 2))).toBe(true);
     expect(isValid(Lib.AllOf([Lib.BOOL, Lib.NULL]))).toBe(true);
     expect(isValid(Lib.AnyOf([Lib.BOOL, Lib.NULL]))).toBe(true);

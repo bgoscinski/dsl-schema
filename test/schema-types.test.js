@@ -258,32 +258,71 @@ describe(T.Tuple.name, () => {
     expect(T.Tuple()).toEqual({
       type: 'array',
       items: [],
+      minItems: 0,
+      maxItems: 0,
       additionalItems: false,
     });
 
     expect(T.Tuple([])).toEqual({
       type: 'array',
       items: [],
+      minItems: 0,
+      maxItems: 0,
       additionalItems: false,
     });
   });
 
-  it('should accept multiple schemas', () => {
-    expect(T.Tuple(T.BOOL)).toEqual({
+  it('should accept multiple tagged schemas', () => {
+    expect(T.Tuple(T.req(T.BOOL))).toEqual({
       type: 'array',
       items: [T.BOOL],
+      minItems: 1,
+      maxItems: 1,
       additionalItems: false,
     });
 
-    expect(T.Tuple(T.BOOL, T.NULL)).toEqual({
+    expect(T.Tuple(T.req(T.BOOL), T.req(T.NULL))).toEqual({
       type: 'array',
       items: [T.BOOL, T.NULL],
+      minItems: 2,
+      maxItems: 2,
       additionalItems: false,
     });
 
-    expect(T.Tuple([], T.BOOL, [T.Int(), T.Float()], T.NULL)).toEqual({
+    expect(
+      T.Tuple(
+        [],
+        T.req(T.BOOL),
+        [],
+        [T.req(T.Int()), T.req(T.Float())],
+        T.req(T.NULL),
+        []
+      )
+    ).toEqual({
       type: 'array',
       items: [T.BOOL, T.Int(), T.Float(), T.NULL],
+      minItems: 4,
+      maxItems: 4,
+      additionalItems: false,
+    });
+  });
+
+  it('should allow optional elements at the end of tuple', () => {
+    expect(T.Tuple(T.req(T.Int()), T.opt(T.Float()), T.opt(T.NULL))).toEqual({
+      type: 'array',
+      items: [T.Int(), T.Float(), T.NULL],
+      minItems: 1,
+      maxItems: 3,
+      additionalItems: false,
+    });
+  });
+
+  it('should handle optional elements between required ones (should be OneOf [x, NULL])', () => {
+    expect(T.Tuple(T.req(T.Int()), T.opt(T.Int()), T.req(T.Float()))).toEqual({
+      type: 'array',
+      items: [T.Int(), T.OneOf(T.Int(), T.NULL), T.Float()],
+      minItems: 3,
+      maxItems: 3,
       additionalItems: false,
     });
   });
