@@ -5,10 +5,12 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsc -p ./",
     "test": "jest",
     "dev": "tsc -p ./ -w",
     "tdd": "jest --watch",
-    "prepublishOnly": "tsc -p ./"
+    "pretest": "npm run -s build",
+    "prepublishOnly": "npm run -s build"
   },
   "repository": {
     "type": "git",
