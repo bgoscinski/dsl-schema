@@ -29,9 +29,9 @@ export function sthLike(example) {
   }
   if (J.isArrayLike(example)) {
     return T.Tuple(
-      Array.from(example)
-        .map(sthLike)
-        .map(T.req)
+      Array.from(example).map(ex => {
+        return isTagged(ex) ? ex : T.req(sthLike(ex));
+      })
     );
   }
   if (J.isObjectLike(example)) {

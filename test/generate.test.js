@@ -35,6 +35,24 @@ describe(G.sthLike.name, () => {
     expect(actual).toEqual(expected);
   });
 
+  it('should allow to put tagged schemas in example tuples', () => {
+    const actual = G.sthLike([
+      1,
+      like.opt(like(true)),
+      'str',
+      like.req(like.IPV4),
+    ]);
+
+    const expected = like.Tuple([
+      like.req(like.Int()),
+      like.opt(like.BOOL),
+      like.req(like.Str()),
+      like.req(like.IPV4),
+    ]);
+
+    expect(actual).toEqual(expected);
+  });
+
   it.each`
     name                    | val                                          | schema
     ${'null'}               | ${null}                                      | ${like.NULL}
