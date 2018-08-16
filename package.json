@@ -2,10 +2,12 @@
   "name": "dsl-schema",
   "version": "0.0.2",
   "description": "Write and check schema comilancy with simple DSL",
-  "main": "lib/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "dev": "jest --watch"
+    "dev": "jest --watch",
+    "prepublishOnly": "tsc -p ./"
   },
   "repository": {
     "type": "git",
@@ -28,5 +30,8 @@
     "jest": "^23.5.0",
     "typescript": "^3.0.1"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "files": [
+    "dist"
+  ]
 }

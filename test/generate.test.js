@@ -1,5 +1,5 @@
-const T = require('../lib/schema-types');
-const G = require('../lib/generate');
+const T = require('../dist/schema-types');
+const G = require('../dist/generate');
 
 describe(G.sthLike.name, () => {
   it('given an example object should return a record schema', () => {

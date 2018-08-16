@@ -1,7 +1,7 @@
 const Lib = require('../');
 const Ajv = require('ajv');
 const draftv7 = require('ajv/lib/refs/json-schema-draft-07.json');
-const { isRegistered } = require('../lib/register');
+const { isRegistered } = require('../dist/register');
 
 describe('public api', () => {
   const typeFactories = [

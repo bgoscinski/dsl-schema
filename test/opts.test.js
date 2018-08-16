@@ -1,4 +1,4 @@
-const { parse } = require('../lib/opts');
+const { parse } = require('../dist/opts');
 
 describe('Opts.parse', () => {
   it('should parse range opts', () => {

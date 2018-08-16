@@ -1,4 +1,4 @@
-const T = require('../lib/schema-types');
+const T = require('../dist/schema-types');
 
 describe(T.Str.name, () => {
   it('should just work', () => {

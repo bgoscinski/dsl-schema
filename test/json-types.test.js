@@ -1,4 +1,4 @@
-const J = require('../lib/json-types');
+const J = require('../dist/json-types');
 
 const vals = {
   pojo: ['pojo', {}],
