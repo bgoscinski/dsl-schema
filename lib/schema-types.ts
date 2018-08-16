@@ -146,7 +146,7 @@ export function Dict(optsStr, itemsSchema) {
   return schema;
 }
 
-const ListCall = `${List.name}(opts?, itemsSchema?)`;
+const ListCall = `${List.name}(opts?, itemsSchema)`;
 export function List(optsStr, itemsSchema) {
   let argc = arguments.length;
 
@@ -228,7 +228,7 @@ export function Tuple(...members) {
   };
 }
 
-const EnumCall = `${Enum.name}(...opts)`;
+const EnumCall = `${Enum.name}(...items)`;
 export function Enum(...items) {
   items = [].concat(...items);
   if (!items.length) {
