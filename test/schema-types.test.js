@@ -129,14 +129,14 @@ describe(T.Record.name, () => {
   it('should work', () => {
     const schema = T.Record({
       foo: T.opt(T.Int()),
-      someProp: T.req(T.BOOL),
+      someProp: T.req(T.ANY),
     });
 
     expect(schema).toEqual({
       type: 'object',
       properties: {
         foo: T.Int(),
-        someProp: T.BOOL,
+        someProp: T.ANY,
       },
       required: ['someProp'],
       additionalProperties: false,
@@ -371,7 +371,6 @@ describe(T.isSchema.name, () => {
   it('should just work', () => {
     expect(T.isSchema()).toBe(false);
     expect(T.isSchema(42)).toBe(false);
-    expect(T.isSchema({})).toBe(false);
     expect(T.isSchema([])).toBe(false);
 
     expect(T.isSchema(T.Str())).toBe(true);
@@ -390,5 +389,6 @@ describe(T.isSchema.name, () => {
     expect(T.isSchema(T.OneOf(T.Int(), T.Float()))).toBe(true);
     expect(T.isSchema(T.OneOf(T.Int(), T.Float()))).toBe(true);
     expect(T.isSchema(T.Not(T.Int()))).toBe(true);
+    expect(T.isSchema(T.ANY)).toBe(true);
   });
 });

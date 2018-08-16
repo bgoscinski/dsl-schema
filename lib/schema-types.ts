@@ -31,7 +31,7 @@ export function isSchema(x) {
     );
   }
 
-  return false;
+  return keys.length === 0;
 }
 
 function isSchemaList(x) {
@@ -269,7 +269,7 @@ export function Not(schema) {
   throw Error(NotCall + '`schema` should be a schema');
 }
 
-export const ANY = AnyOf([]);
+export const ANY = {};
 export const NULL = { type: 'null' };
 export const BOOL = { type: 'boolean' };
 export const DATE = { type: 'string', format: 'date' };
