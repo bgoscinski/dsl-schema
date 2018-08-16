@@ -1,6 +1,6 @@
 {
   "name": "dsl-schema",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Write and check schema comilancy with simple DSL",
   "main": "lib/index.js",
   "scripts": {
