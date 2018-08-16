@@ -1,4 +1,5 @@
-import * as P from '../lib/json-types';
+const J = require('../lib/json-types');
+
 const vals = {
   pojo: ['pojo', {}],
   array: ['array', []],
@@ -27,14 +28,14 @@ const diff = (all, toRemove) =>
 
 describe.each`
   predicate               | okVals
-  ${P.isArrayLike.name}   | ${[vals.array, vals.arrayInstance, vals.arguments]}
-  ${P.isBooleanLike.name} | ${[vals.booleanInstance, vals.true, vals.false]}
-  ${P.isNullLike.name}    | ${[vals.null, vals.undefined]}
-  ${P.isNumberLike.name}  | ${[vals.number, vals.NaN, vals.numberInstance]}
-  ${P.isObjectLike.name}  | ${[vals.pojo, vals.classInstance]}
-  ${P.isStringLike.name}  | ${[vals.stringInstance, vals.string]}
+  ${J.isArrayLike.name}   | ${[vals.array, vals.arrayInstance, vals.arguments]}
+  ${J.isBooleanLike.name} | ${[vals.booleanInstance, vals.true, vals.false]}
+  ${J.isNullLike.name}    | ${[vals.null, vals.undefined]}
+  ${J.isNumberLike.name}  | ${[vals.number, vals.NaN, vals.numberInstance]}
+  ${J.isObjectLike.name}  | ${[vals.pojo, vals.classInstance]}
+  ${J.isStringLike.name}  | ${[vals.stringInstance, vals.string]}
 `('json type predicate $predicate', ({ predicate, okVals }) => {
-  const pred = P[predicate];
+  const pred = J[predicate];
   const notOkVals = diff(vals, okVals);
 
   okVals.forEach(([name, val]) => {

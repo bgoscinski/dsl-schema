@@ -1,7 +1,7 @@
-import * as Lib from '../lib';
-import Ajv from 'ajv';
-import draftv7 from 'ajv/lib/refs/json-schema-draft-07.json';
-import { isRegistered } from '../lib/register';
+const Lib = require('../');
+const Ajv = require('ajv');
+const draftv7 = require('ajv/lib/refs/json-schema-draft-07.json');
+const { isRegistered } = require('../lib/register');
 
 describe('public api', () => {
   const typeFactories = [

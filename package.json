@@ -2,7 +2,7 @@
   "name": "dsl-schema",
   "version": "0.0.1",
   "description": "Write and check schema comilancy with simple DSL",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest",
     "dev": "jest --watch"
@@ -25,9 +25,8 @@
   "homepage": "https://github.com/bgoscinski/dsl-schema#readme",
   "devDependencies": {
     "ajv": "^6.5.2",
-    "babel-jest": "^23.4.2",
-    "babel-preset-env": "^1.7.0",
-    "jest": "^23.5.0"
+    "jest": "^23.5.0",
+    "typescript": "^3.0.1"
   },
   "dependencies": {}
 }

@@ -1,4 +1,4 @@
-import { parse } from '../lib/opts';
+const { parse } = require('../lib/opts');
 
 describe('Opts.parse', () => {
   it('should parse range opts', () => {

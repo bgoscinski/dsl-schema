@@ -1,4 +1,4 @@
-import * as T from '../lib/schema-types';
+const T = require('../lib/schema-types');
 
 describe(T.Str.name, () => {
   it('should just work', () => {

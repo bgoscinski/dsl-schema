@@ -1,5 +1,5 @@
-import * as T from '../lib/schema-types';
-import * as G from '../lib/generate';
+const T = require('../lib/schema-types');
+const G = require('../lib/generate');
 
 describe(G.sthLike.name, () => {
   it('given an example object should return a record schema', () => {
