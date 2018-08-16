@@ -1,4 +1,5 @@
-const like = require('../').default;
+const Lib = require('../');
+const like = Lib.default;
 const Ajv = require('ajv');
 const draftv7 = require('ajv/lib/refs/json-schema-draft-07.json');
 const { isRegistered } = require('../dist/register');
@@ -44,6 +45,7 @@ describe('public api', () => {
   typeFactories.concat(otherFns).forEach(name => {
     it(`should expose ${name} factory`, () => {
       expect(typeof like[name]).toBe('function');
+      expect(Lib[name] === like[name]).toBe(true);
     });
   });
 
@@ -51,6 +53,7 @@ describe('public api', () => {
     it(`should expose ${name} constant schema`, () => {
       expect(typeof like[name]).toBe('object');
       expect(isRegistered(like[name])).toBe(true);
+      expect(Lib[name] === like[name]).toBe(true);
     });
   });
 
@@ -58,6 +61,11 @@ describe('public api', () => {
     const all = [].concat(typeFactories, constantSchemas, otherFns);
     for (const key in like) {
       expect(all).toContain(key);
+    }
+    for (const key in Lib) {
+      if (key !== 'default') {
+        expect(all).toContain(key);
+      }
     }
   });
 });
