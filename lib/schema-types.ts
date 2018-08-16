@@ -269,6 +269,7 @@ export function Not(schema) {
   throw Error(NotCall + '`schema` should be a schema');
 }
 
+export const ANY = AnyOf([]);
 export const NULL = { type: 'null' };
 export const BOOL = { type: 'boolean' };
 export const DATE = { type: 'string', format: 'date' };

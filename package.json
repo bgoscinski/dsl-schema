@@ -6,7 +6,8 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "dev": "jest --watch",
+    "dev": "tsc -p ./ -w",
+    "tdd": "jest --watch",
     "prepublishOnly": "tsc -p ./"
   },
   "repository": {

@@ -1,26 +1,27 @@
-const Lib = require('../');
+const like = require('../').default;
 const Ajv = require('ajv');
 const draftv7 = require('ajv/lib/refs/json-schema-draft-07.json');
 const { isRegistered } = require('../dist/register');
 
 describe('public api', () => {
   const typeFactories = [
-    Lib.Str.name,
+    like.Str.name,
     // Lib.Pattern.name,
-    Lib.Int.name,
-    Lib.Float.name,
-    Lib.Record.name,
-    Lib.Dict.name,
-    Lib.List.name,
-    Lib.Tuple.name,
-    Lib.Enum.name,
-    Lib.AllOf.name,
-    Lib.AnyOf.name,
-    Lib.OneOf.name,
-    Lib.Not.name,
+    like.Int.name,
+    like.Float.name,
+    like.Record.name,
+    like.Dict.name,
+    like.List.name,
+    like.Tuple.name,
+    like.Enum.name,
+    like.AllOf.name,
+    like.AnyOf.name,
+    like.OneOf.name,
+    like.Not.name,
   ];
 
   const constantSchemas = [
+    'ANY',
     'BOOL',
     'NULL',
     'DATE',
@@ -38,51 +39,53 @@ describe('public api', () => {
     'UUID',
   ];
 
-  const otherFns = [Lib.sthLike.name, Lib.req.name, Lib.opt.name];
+  const otherFns = [like.req.name, like.opt.name];
 
   typeFactories.concat(otherFns).forEach(name => {
     it(`should expose ${name} factory`, () => {
-      expect(typeof Lib[name]).toBe('function');
+      expect(typeof like[name]).toBe('function');
     });
   });
 
   constantSchemas.forEach(name => {
     it(`should expose ${name} constant schema`, () => {
-      expect(typeof Lib[name]).toBe('object');
-      expect(isRegistered(Lib[name])).toBe(true);
+      expect(typeof like[name]).toBe('object');
+      expect(isRegistered(like[name])).toBe(true);
     });
   });
 
   it(`should not expose anything else`, () => {
     const all = [].concat(typeFactories, constantSchemas, otherFns);
-    for (const key in Lib) {
+    for (const key in like) {
       expect(all).toContain(key);
     }
   });
 });
 
-describe(`exposed ${Lib.sthLike.name}`, () => {
+describe(`exposed function`, () => {
   it(`should allow nesting schemas in examples`, () => {
-    const actual = Lib.sthLike({
+    const actual = like({
       foo: 'foo',
       bar: {
-        baz: [true, 2, Lib.Str('len >= 5')],
+        baz: [true, 2, like.Str('len >= 5')],
         some: 'prop1',
         other: new String('prop'),
-        andSomeExplicitlySchemed: Lib.List(Lib.sthLike(3)),
+        andSomeExplicitlySchemed: like.List(like(3)),
       },
     });
 
-    const expected = Lib.Record({
-      foo: Lib.req(Lib.Str()),
-      bar: Lib.req(
-        Lib.Record({
-          baz: Lib.req(
-            Lib.Tuple([Lib.BOOL, Lib.Int(), Lib.Str('len >= 5')].map(Lib.req))
+    const expected = like.Record({
+      foo: like.req(like.Str()),
+      bar: like.req(
+        like.Record({
+          baz: like.req(
+            like.Tuple(
+              [like.BOOL, like.Int(), like.Str('len >= 5')].map(like.req)
+            )
           ),
-          some: Lib.req(Lib.Str()),
-          other: Lib.req(Lib.Str()),
-          andSomeExplicitlySchemed: Lib.req(Lib.List(Lib.Int())),
+          some: like.req(like.Str()),
+          other: like.req(like.Str()),
+          andSomeExplicitlySchemed: like.req(like.List(like.Int())),
         })
       ),
     });
@@ -93,17 +96,19 @@ describe(`exposed ${Lib.sthLike.name}`, () => {
   const isValid = new Ajv({ format: 'full' }).compile(draftv7);
 
   it(`should generate valid schema`, () => {
-    expect(isValid(Lib.Str('1 < len < 321'))).toBe(true);
-    expect(isValid(Lib.Int('1 < x < 23, 3.2n'))).toBe(true);
-    expect(isValid(Lib.Float('1 <= x < 2, 0.1n'))).toBe(true);
-    expect(isValid(Lib.Record({ foo: Lib.req(Lib.BOOL) }))).toBe(true);
-    expect(isValid(Lib.Dict('23 < len <= 32', Lib.BOOL))).toBe(true);
-    expect(isValid(Lib.List('uniq, 2 < len < 3', Lib.BOOL))).toBe(true);
-    expect(isValid(Lib.Tuple(Lib.req(Lib.BOOL), Lib.req(Lib.NULL)))).toBe(true);
-    expect(isValid(Lib.Enum(true, false, 1, 2))).toBe(true);
-    expect(isValid(Lib.AllOf([Lib.BOOL, Lib.NULL]))).toBe(true);
-    expect(isValid(Lib.AnyOf([Lib.BOOL, Lib.NULL]))).toBe(true);
-    expect(isValid(Lib.OneOf([Lib.BOOL, Lib.NULL]))).toBe(true);
-    expect(isValid(Lib.Not(Lib.BOOL))).toBe(true);
+    expect(isValid(like.Str('1 < len < 321'))).toBe(true);
+    expect(isValid(like.Int('1 < x < 23, 3.2n'))).toBe(true);
+    expect(isValid(like.Float('1 <= x < 2, 0.1n'))).toBe(true);
+    expect(isValid(like.Record({ foo: like.req(like.BOOL) }))).toBe(true);
+    expect(isValid(like.Dict('23 < len <= 32', like.BOOL))).toBe(true);
+    expect(isValid(like.List('uniq, 2 < len < 3', like.BOOL))).toBe(true);
+    expect(isValid(like.Tuple(like.req(like.BOOL), like.req(like.NULL)))).toBe(
+      true
+    );
+    expect(isValid(like.Enum(true, false, 1, 2))).toBe(true);
+    expect(isValid(like.AllOf([like.BOOL, like.NULL]))).toBe(true);
+    expect(isValid(like.AnyOf([like.BOOL, like.NULL]))).toBe(true);
+    expect(isValid(like.OneOf([like.BOOL, like.NULL]))).toBe(true);
+    expect(isValid(like.Not(like.BOOL))).toBe(true);
   });
 });
