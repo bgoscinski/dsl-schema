@@ -1,6 +1,6 @@
 import * as J from './json-types';
 import * as T from './schema-types';
-import { isRegistered } from './register';
+import { isRegistered, isTagged } from './register';
 
 const DATE_TIME_LIKE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
 const URL_LIKE = /^[a-z][a-z0-9+.-]*:/;
@@ -36,7 +36,11 @@ export function sthLike(example) {
   }
   if (J.isObjectLike(example)) {
     const props = Object.keys(example).reduce((acc, name) => {
-      acc[name] = T.req(sthLike(example[name]));
+      if (isTagged(example[name])) {
+        acc[name] = example[name];
+      } else {
+        acc[name] = T.req(sthLike(example[name]));
+      }
       return acc;
     }, {});
 

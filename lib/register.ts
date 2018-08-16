@@ -23,3 +23,29 @@ export function wrapFactory(factory) {
     return regAsSchema(factory.apply(this, args));
   }
 }
+
+const taggerSet = new WeakSet();
+
+export function isTagged(x) {
+  return taggerSet.has(x);
+}
+
+export function regAsTagged(x) {
+  taggerSet.add(x);
+  return x;
+}
+
+export function wrapTagger(tagger) {
+  for (const prop of ['name', 'length', 'displayName']) {
+    const desc = Object.getOwnPropertyDescriptor(tagger, prop);
+    if (desc) {
+      Object.defineProperty(wrapper, prop, desc);
+    }
+  }
+
+  return wrapper;
+
+  function wrapper(...args) {
+    return regAsTagged(tagger.apply(this, args));
+  }
+}
