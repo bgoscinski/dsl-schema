@@ -53,6 +53,20 @@ describe(G.sthLike.name, () => {
     expect(actual).toEqual(expected);
   });
 
+  it('should prefer object-like to array-like examples', () => {
+    const actual = G.sthLike({
+      foo: 3,
+      length: 13,
+    });
+
+    const expected = like.Record({
+      foo: like.req(like.Int()),
+      length: like.req(like.Int()),
+    });
+
+    expect(actual).toEqual(expected);
+  });
+
   it.each`
     name                    | val                                          | schema
     ${'null'}               | ${null}                                      | ${like.NULL}

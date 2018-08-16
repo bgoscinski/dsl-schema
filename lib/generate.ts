@@ -27,13 +27,6 @@ export function sthLike(example) {
     if (UUID_LIKE.test(example)) return T.UUID;
     return T.Str();
   }
-  if (J.isArrayLike(example)) {
-    return T.Tuple(
-      Array.from(example).map(ex => {
-        return isTagged(ex) ? ex : T.req(sthLike(ex));
-      })
-    );
-  }
   if (J.isObjectLike(example)) {
     const props = Object.keys(example).reduce((acc, name) => {
       if (isTagged(example[name])) {
@@ -45,6 +38,13 @@ export function sthLike(example) {
     }, {});
 
     return T.Record(props);
+  }
+  if (J.isArrayLike(example)) {
+    return T.Tuple(
+      Array.from(example).map(ex => {
+        return isTagged(ex) ? ex : T.req(sthLike(ex));
+      })
+    );
   }
 
   throw TypeError(
