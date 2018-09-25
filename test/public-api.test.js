@@ -74,12 +74,12 @@ describe(`exposed function`, () => {
   it(`should allow nesting schemas in examples`, () => {
     const actual = like({
       foo: 'foo',
-      bar: {
+      bar: like({
         baz: [true, 2, like.Str('len >= 5')],
         some: 'prop1',
         other: new String('prop'),
         andSomeExplicitlySchemed: like.List(like(3)),
-      },
+      }),
     });
 
     const expected = like.Record({
