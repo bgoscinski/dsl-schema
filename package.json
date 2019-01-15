@@ -29,9 +29,9 @@
   },
   "homepage": "https://github.com/bgoscinski/dsl-schema#readme",
   "devDependencies": {
-    "ajv": "^6.5.2",
-    "jest": "^23.5.0",
-    "typescript": "^3.0.1"
+    "ajv": "^6.7.0",
+    "jest": "^23.6.0",
+    "typescript": "^3.2.2"
   },
   "dependencies": {},
   "files": [
