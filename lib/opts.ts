@@ -1,69 +1,99 @@
-export const isOptsStr = x => typeof x === 'string';
+export type Opt = MultOpt | RangeOpt | UniqOpt
 
-function tryParseUniq(str) {
+export const isOptsStr = (x: unknown): x is string => typeof x === 'string'
+
+export interface UniqOpt {
+  type: 'uniq'
+}
+
+function tryParseUniq(str: string): UniqOpt | undefined {
   if (str === 'uniq' || str === 'unique') {
-    return { type: 'uniq' };
+    return { type: 'uniq' }
   }
 }
 
-export const uniq = () => opt => opt.type === 'uniq';
+export const uniq = () => (opt: Opt): opt is UniqOpt => opt.type === 'uniq'
 
-const getLeftBoundary = ([op, incl], val) => {
-  const ret = op === '<' ? { min: val } : { max: val };
-  if (!incl) ret[op === '<' ? 'exclusiveMin' : 'exclusiveMax'] = true;
-  return ret;
-};
+type Ord = '<=' | '<' | '>' | '>='
+type MinBoundary = { min: number; exclusiveMin?: true }
+type MaxBoundary = { max: number; exclusiveMax?: true }
+type Boundary = MinBoundary | MaxBoundary
 
-const getRightBoundary = ([op, incl], val) => {
-  const ret = op === '>' ? { min: val } : { max: val };
-  if (!incl) ret[op === '>' ? 'exclusiveMin' : 'exclusiveMax'] = true;
-  return ret;
-};
+const getLeftBoundary = ([op, incl]: Ord, val: number): Boundary => {
+  if (op === '<') {
+    return incl ? { min: val } : { min: val, exclusiveMin: true }
+  } else {
+    return incl ? { max: val } : { max: val, exclusiveMax: true }
+  }
+}
+
+const getRightBoundary = ([op, incl]: Ord, val: number): Boundary => {
+  if (op === '>') {
+    return incl ? { min: val } : { min: val, exclusiveMin: true }
+  } else {
+    return incl ? { max: val } : { max: val, exclusiveMax: true }
+  }
+}
 
 //                       | lhs   |   | lop  |     | bind |      | rop  |   | rhs   |
-const RANGE_REGEX = /^(?:([\d\.]+)\s*([<>]=?)\s*)?([a-z]+)(?:\s*([<>]=?)\s*([\d\.]+))?$/i;
+const RANGE_REGEX = /^(?:([\d\.]+)\s*([<>]=?)\s*)?([a-z]+)(?:\s*([<>]=?)\s*([\d\.]+))?$/i
 
-function tryParseRangeOpt(str) {
-  const match = str.trim().match(RANGE_REGEX);
+export interface RangeOpt {
+  type: 'range'
+  binding: string
+  min?: number
+  exclusiveMin?: boolean
+  max?: number
+  exclusiveMax?: boolean
+}
 
-  if (!match) return;
-  const [, lhs, lop, binding, rop, rhs] = match;
-  if (!lop && !rop) return;
-  if (lop && rop && lop.charAt(0) !== rop.charAt(0)) return;
+function tryParseRangeOpt(str: string): RangeOpt | undefined {
+  const match = str.trim().match(RANGE_REGEX)
+
+  if (!match) return
+  const [, lhs, lop, binding, rop, rhs] = match
+  if (!lop && !rop) return
+  if (lop && rop && lop.charAt(0) !== rop.charAt(0)) return
 
   return {
     type: 'range',
     binding,
-    ...(lop && getLeftBoundary(lop, parseFloat(lhs))),
-    ...(rop && getRightBoundary(rop, parseFloat(rhs))),
-  };
+    ...(lop && getLeftBoundary(lop as Ord, parseFloat(lhs))),
+    ...(rop && getRightBoundary(rop as Ord, parseFloat(rhs)))
+  }
 }
 
-export const range = binding => opt =>
-  opt.type === 'range' && opt.binding === binding;
+export const range = (binding: string) => (opt: Opt): opt is RangeOpt =>
+  opt.type === 'range' && opt.binding === binding
 
 //                      | lhs   |          | bind |           | rhs   |
-const MULT_REGEX = /^(?:([\d\.]+)\s*\*\s*)?([a-z]+)(?:\s*\*\s*([\d\.]+))?$/i;
+const MULT_REGEX = /^(?:([\d\.]+)\s*\*\s*)?([a-z]+)(?:\s*\*\s*([\d\.]+))?$/i
 
-function tryParseMult(str) {
-  const match = str.trim().match(MULT_REGEX);
-
-  if (!match) return;
-  const [, lhs, binding, rhs] = match;
-  if (lhs && rhs) return;
-  if (!lhs && !rhs) return;
-
-  return { type: 'mult', binding, multiplier: parseFloat(lhs || rhs) };
+export interface MultOpt {
+  type: 'mult'
+  binding: string
+  multiplier: number
 }
 
-export const mult = binding => opt =>
-  opt.type === 'mult' && opt.binding === binding;
+function tryParseMult(str: string): MultOpt | undefined {
+  const match = str.trim().match(MULT_REGEX)
 
-export function parse(spec) {
-  if (!spec) return [];
-  return spec.split(/\s*,\s*/).reduce((acc, part) => {
+  if (!match) return
+  const [, lhs, binding, rhs] = match
+  if (lhs && rhs) return
+  if (!lhs && !rhs) return
+
+  return { type: 'mult', binding, multiplier: parseFloat(lhs || rhs) }
+}
+
+export const mult = (binding: string) => (opt: Opt): opt is MultOpt =>
+  opt.type === 'mult' && opt.binding === binding
+
+export function parse(spec: string | undefined): Opt[] {
+  if (!spec) return []
+  return spec.split(/\s*,\s*/).reduce<Opt[]>((acc, part) => {
     const parsed =
-      tryParseUniq(part) || tryParseRangeOpt(part) || tryParseMult(part);
-    return parsed ? [...acc, parsed] : acc;
-  }, []);
+      tryParseUniq(part) || tryParseRangeOpt(part) || tryParseMult(part)
+    return parsed ? [...acc, parsed] : acc
+  }, [])
 }

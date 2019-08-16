@@ -1,51 +1,53 @@
-const schemaSet = new WeakSet();
+import { MemberTag, Schema } from './schema-types'
 
-export function isRegistered(x) {
-  return schemaSet.has(x);
+const schemaSet = new WeakSet<Schema>()
+
+export function isRegistered(x: unknown): x is Schema {
+  return schemaSet.has(x as any)
 }
 
-export function regAsSchema(x) {
-  schemaSet.add(x);
-  return x;
+export function regAsSchema(x: Schema): Schema {
+  schemaSet.add(x)
+  return x
 }
 
-export function wrapFactory(factory) {
+export function wrapFactory<F extends (...a: any[]) => Schema>(factory: F): F {
   for (const prop of ['name', 'length', 'displayName']) {
-    const desc = Object.getOwnPropertyDescriptor(factory, prop);
+    const desc = Object.getOwnPropertyDescriptor(factory, prop)
     if (desc) {
-      Object.defineProperty(wrapper, prop, desc);
+      Object.defineProperty(wrapper, prop, desc)
     }
   }
 
-  return wrapper;
+  return wrapper as F
 
-  function wrapper(...args) {
-    return regAsSchema(factory.apply(this, args));
+  function wrapper(this: any, ...args: any[]) {
+    return regAsSchema(factory.apply(this, args))
   }
 }
 
-const taggerSet = new WeakSet();
+const taggerSet = new WeakSet<MemberTag>()
 
-export function isTagged(x) {
-  return taggerSet.has(x);
+export function isTagged(x: unknown): x is MemberTag {
+  return taggerSet.has(x as any)
 }
 
-export function regAsTagged(x) {
-  taggerSet.add(x);
-  return x;
+export function regAsTagged(x: MemberTag) {
+  taggerSet.add(x)
+  return x
 }
 
-export function wrapTagger(tagger) {
+export function wrapTagger<F extends (...a: any[]) => MemberTag>(tagger: F): F {
   for (const prop of ['name', 'length', 'displayName']) {
-    const desc = Object.getOwnPropertyDescriptor(tagger, prop);
+    const desc = Object.getOwnPropertyDescriptor(tagger, prop)
     if (desc) {
-      Object.defineProperty(wrapper, prop, desc);
+      Object.defineProperty(wrapper, prop, desc)
     }
   }
 
-  return wrapper;
+  return wrapper as F
 
-  function wrapper(...args) {
-    return regAsTagged(tagger.apply(this, args));
+  function wrapper(this: any, ...args: any[]) {
+    return regAsTagged(tagger.apply(this, args))
   }
 }
