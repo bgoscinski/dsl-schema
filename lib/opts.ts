@@ -59,7 +59,7 @@ function tryParseRangeOpt(str: string): RangeOpt | undefined {
     type: 'range',
     binding,
     ...(lop && getLeftBoundary(lop as Ord, parseFloat(lhs))),
-    ...(rop && getRightBoundary(rop as Ord, parseFloat(rhs)))
+    ...(rop && getRightBoundary(rop as Ord, parseFloat(rhs))),
   }
 }
 

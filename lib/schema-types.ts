@@ -104,7 +104,7 @@ function num(optsStr?: string): NumSchema {
     ...(range && range.max != null
       ? { [range.exclusiveMax ? 'exclusiveMaximum' : 'maximum']: range.max }
       : null),
-    ...(mult && { multipleOf: mult.multiplier })
+    ...(mult && { multipleOf: mult.multiplier }),
   }
 }
 
@@ -158,7 +158,7 @@ export function Record(members: { [x: string]: MemberTag }): RecSchema {
   }
 
   const keys = Object.keys(members)
-  if (!keys.every(key => isMemberTag(members[key]))) {
+  if (!keys.every((key) => isMemberTag(members[key]))) {
     const advice = `Use \`${req.name}\` or \`${opt.name}\` helpers`
     throw Error(RecordCall + `: Some members are not tagged. ${advice}`)
   }
@@ -169,8 +169,8 @@ export function Record(members: { [x: string]: MemberTag }): RecSchema {
       acc[key] = members[key].schema
       return acc
     }, {}),
-    required: keys.filter(key => members[key].required),
-    additionalProperties: false
+    required: keys.filter((key) => members[key].required),
+    additionalProperties: false,
   }
 }
 
@@ -220,7 +220,7 @@ export function List(itemsSchema: Schema): ListSchema
 export function List(optsStr: string, itemsSchema: Schema): ListSchema
 export function List(
   optsStr: string | Schema,
-  itemsSchema?: Schema
+  itemsSchema?: Schema,
 ): ListSchema {
   let argc = arguments.length
 
@@ -233,7 +233,7 @@ export function List(
   if (isSchemaArr(itemsSchema) || argc > 2)
     throw Error(
       ListCall +
-        `: \`itemsSchema\` should be a schema. Did you mean ${TupleCall}?`
+        `: \`itemsSchema\` should be a schema. Did you mean ${TupleCall}?`,
     )
 
   const schema: any = { type: 'array' }
@@ -269,14 +269,14 @@ function flatten<T>(arr: TOrArr<T>[]): T[] {
 
 function toSchemaList(
   schemas: TOrArr<Schema>[],
-  callExample: string
+  callExample: string,
 ): Schema[] {
   const ret: Schema[] = flatten(schemas)
 
   for (let i = 0; i < ret.length; i++) {
     if (!isSchema(ret[i])) {
       throw Error(
-        `${callExample}: \`schemaN\` should be a schema or array of schemas`
+        `${callExample}: \`schemaN\` should be a schema or array of schemas`,
       )
     }
   }
@@ -299,7 +299,7 @@ export function Tuple(...arg: TOrArr<MemberTag>[]): TupleSchema {
   if (!members.every(isMemberTag)) {
     const advice = `Use \`${req.name}\` or \`${opt.name}\` helpers`
     throw Error(
-      TupleCall + `: every \`member\` should be a tagged schema. ${advice}`
+      TupleCall + `: every \`member\` should be a tagged schema. ${advice}`,
     )
   }
 
@@ -322,7 +322,7 @@ export function Tuple(...arg: TOrArr<MemberTag>[]): TupleSchema {
     items: required.concat(optional),
     minItems: required.length,
     maxItems: required.length + optional.length,
-    additionalItems: false
+    additionalItems: false,
   }
 }
 
@@ -351,7 +351,7 @@ export interface AllOfSchema {
 const AllOfCall = `${AllOf.name}(schema0, schema1, ...)`
 export function AllOf(...schemas: TOrArr<Schema>[]): AllOfSchema {
   return {
-    allOf: toSchemaList(schemas, AllOfCall)
+    allOf: toSchemaList(schemas, AllOfCall),
   }
 }
 
@@ -362,7 +362,7 @@ export interface AnyOfSchema {
 const AnyOfCall = `${AnyOf.name}(schema0, schema1, ...)`
 export function AnyOf(...schemas: TOrArr<Schema>[]): AnyOfSchema {
   return {
-    anyOf: toSchemaList(schemas, AnyOfCall)
+    anyOf: toSchemaList(schemas, AnyOfCall),
   }
 }
 
@@ -373,7 +373,7 @@ export interface OneOfSchema {
 const OneOfCall = `${OneOf.name}(schema0, schema1, ...)`
 export function OneOf(...schemas: TOrArr<Schema>[]): OneOfSchema {
   return {
-    oneOf: toSchemaList(schemas, OneOfCall)
+    oneOf: toSchemaList(schemas, OneOfCall),
   }
 }
 
@@ -408,11 +408,11 @@ export const DATE_TIME: FormatSchema = { type: 'string', format: 'date-time' }
 export const URI: FormatSchema = { type: 'string', format: 'uri' }
 export const URI_REFERENCE: FormatSchema = {
   type: 'string',
-  format: 'uri-reference'
+  format: 'uri-reference',
 }
 export const URI_TEMPLATE: FormatSchema = {
   type: 'string',
-  format: 'uri-template'
+  format: 'uri-template',
 }
 export const URL: FormatSchema = { type: 'string', format: 'url' }
 export const EMAIL: FormatSchema = { type: 'string', format: 'email' }

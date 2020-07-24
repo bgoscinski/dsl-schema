@@ -5,26 +5,26 @@
 `dsl-schema` provides simple, yet powerful API for building up your `JSON Schema`s based on examples you provide.
 
 ```js
-import like from 'dsl-schema';
+import like from 'dsl-schema'
 
 const mySchema = like({
   foo: 'some string',
   baz: ['yup'],
   // Can be nested for more fine-grained control!
   here: like.Enum('come dat boi', 'I come'),
-});
+})
 
 // true
 ajv.validate(mySchema, {
   foo: 'bar',
   baz: ['fizz buz'],
   here: 'I come',
-});
+})
 
 // false
 ajv.validate(mySchema, {
   not: 'valid',
-});
+})
 ```
 
 ## Getting started
@@ -35,8 +35,8 @@ yarn add dsl-schema
 ```
 
 ```js
-import like from 'dsl-schema';
-const schema = like(1337);
+import like from 'dsl-schema'
+const schema = like(1337)
 ```
 
 ## Docs
@@ -44,7 +44,7 @@ const schema = like(1337);
 ### `like`
 
 ```ts
-like: (example: any) => Schema;
+like: (example: any) => Schema
 ```
 
 - For object like `example` it builds up a [`Record`](#likerecord) of its properties
@@ -61,7 +61,7 @@ like: (example: any) => Schema;
 ### `like.Str`
 
 ```ts
-Str: (opts: string) => Schema;
+Str: (opts: string) => Schema
 ```
 
 Min and max length can be specified using `opts`
@@ -73,7 +73,7 @@ Min and max length can be specified using `opts`
 ### `like.Float`
 
 ```ts
-Float: (opts: string) => Schema;
+Float: (opts: string) => Schema
 ```
 
 Min, max, and multipleOf can be specified using `opts`
@@ -86,7 +86,7 @@ Min, max, and multipleOf can be specified using `opts`
 ### `like.Int`
 
 ```ts
-Int: (opts: string) => Schema;
+Int: (opts: string) => Schema
 ```
 
 See [`Float`](#likefloat)
@@ -94,7 +94,7 @@ See [`Float`](#likefloat)
 ### `like.req`
 
 ```ts
-req: (s: Schema) => TaggedSchema;
+req: (s: Schema) => TaggedSchema
 ```
 
 Tags schema as required
@@ -102,7 +102,7 @@ Tags schema as required
 ### `like.opt`
 
 ```ts
-req: (s: Schema) => TaggedSchema;
+req: (s: Schema) => TaggedSchema
 ```
 
 Tags schema as optional
@@ -110,20 +110,20 @@ Tags schema as optional
 ### `like.Tuple`
 
 ```ts
-Tuple: (...items: TaggedSchema[]) => Schema;
+Tuple: (...items: TaggedSchema[]) => Schema
 ```
 
 ### `like.Record`
 
 ```ts
-Record: (props: { [key: string]: TaggedSchema }) => Schema;
+Record: (props: { [key: string]: TaggedSchema }) => Schema
 ```
 
 ### `like.Dict`
 
 ```ts
-Dict: (opts: string, itemsType: Schema) => Schema;
-Dict: (itemsType: Schema) => Schema;
+Dict: (opts: string, itemsType: Schema) => Schema
+Dict: (itemsType: Schema) => Schema
 ```
 
 Size of the dictionary can be specified using `opts`
@@ -135,8 +135,8 @@ Size of the dictionary can be specified using `opts`
 ### `like.List`
 
 ```ts
-List: (opts: string, itemsType: Schema) => Schema;
-List: (itemsType: Schema) => Schema;
+List: (opts: string, itemsType: Schema) => Schema
+List: (itemsType: Schema) => Schema
 ```
 
 See [`Dict`](#likedict). Can also specify uniqueness
@@ -147,7 +147,7 @@ See [`Dict`](#likedict). Can also specify uniqueness
 ### `like.Enum`
 
 ```ts
-Enum: (...items: (null | boolean | number | string)[]) => Schema;
+Enum: (...items: (null | boolean | number | string)[]) => Schema
 ```
 
 Elements of the `items` must be unique
@@ -155,25 +155,25 @@ Elements of the `items` must be unique
 ### `like.AllOf`
 
 ```ts
-AllOf: (...schemas: Schema[]) => Schema;
+AllOf: (...schemas: Schema[]) => Schema
 ```
 
 ### `like.AnyOf`
 
 ```ts
-AnyOf: (...schemas: Schema[]) => Schema;
+AnyOf: (...schemas: Schema[]) => Schema
 ```
 
 ### `like.OneOf`
 
 ```ts
-OneOf: (...schemas: Schema[]) => Schema;
+OneOf: (...schemas: Schema[]) => Schema
 ```
 
 ### `like.Not`
 
 ```ts
-Not: (schema: Schema) => Schema;
+Not: (schema: Schema) => Schema
 ```
 
 ### Constant schemas

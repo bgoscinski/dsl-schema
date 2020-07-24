@@ -34,20 +34,20 @@ export function sthLike(example: unknown): T.Schema {
         acc[name] = isTagged(val) ? val : T.req(sthLike(val))
         return acc
       },
-      {}
+      {},
     )
 
     return T.Record(props)
   }
   if (J.isArrayLike(example)) {
     return T.Tuple(
-      Array.from(example).map(ex => {
+      Array.from(example).map((ex) => {
         return isTagged(ex) ? ex : T.req(sthLike(ex))
-      })
+      }),
     )
   }
 
   throw TypeError(
-    `${sthLike.name}(example): don't know how to create schema for ${example}`
+    `${sthLike.name}(example): don't know how to create schema for ${example}`,
   )
 }
